@@ -1,7 +1,6 @@
 import json
-import boto3
 from botocore.exceptions import ClientError
-from src.core.aws.config import AWSConfig
+from src.config.config import AWSConfig
 
 class BedrockService:
     """Service for interacting with AWS Bedrock models"""
