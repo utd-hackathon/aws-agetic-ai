@@ -1,0 +1,140 @@
+{
+  "metadata": {
+    "scraped_at": "2025-10-23T01:07:15.602969",
+    "total_jobs": 5,
+    "job_title": "AI Engineer",
+    "location": "Dallas,TX",
+    "source": "LinkedIn Selenium Scraper",
+    "version": "1.0"
+  },
+  "jobs": [
+    {
+      "title": "ML Engineer Summer Intern (Remote & Paid)",
+      "company": "N/A",
+      "location": "N/A",
+      "salary": "Not specified",
+      "job_types": [],
+      "job_type": "Full-time",
+      "experience_level": "Mid-level",
+      "description": "About the job\nJob Posting - Salary Range: See Pay Range\n\nCompany Description\n\nExperian is a global data and technology company, powering opportunities for people and businesses around the world. We help redefine lending practices, uncover and prevent fraud, simplify healthcare, create digital marketing solutions, and gain deeper insights into the automotive market, all using our unique combination of data, analytics, and software. We also assist millions of people in realizing their financial goals and saving time and money.\n\nWe operate across a range of markets, from financial services to healthcare, automotive, agrifinance, insurance, and many more industry segments.\n\nWe invest in people and new advanced technologies to unlock the power of data and to innovate. We're focused on powering opportunities, which is why the Experian Summer Internship Program gives students across the country the chance to apply their education to real-world challenges through meaningful, hands-on projects. Rooted in our 'People First' philosophy, our interns experience firsthand our commitment to personal and professional development. Proudly named one of the Top 100 Internship Programs three years in a row, we invite you to join us and explore your potential with a team that's invested in your growth.\n\nA FTSE 100 Index company listed on the London Stock Exchange (EXPN), we have a team of 25,500 people across 32 countries. Our corporate headquarters are in Dublin, Ireland. Learn more at experianplc.com.\n\nJob Description\n\nYou will be part of the Analytics team and reports to the SVP of Data Science Technology, Product, and Global Analytics. You will develop tools to improve operational efficiency, automate processes, and analyze infrastructure cost effectiveness, while contributing to ongoing project modules.\n\nResponsibilities\n\nDevelop tools for operational efficiency and monitoring\nImprove automation and test coverage\nAnalyze cost efficiency for infrastructure\nExpand project modules\n\nQualifications\n\nQualifications:\n\nCurrently enrolled in a minimum of a Bachelor program in Math/Stats/CS/Engineering or related field\nReturning to school in Fall 2026 to complete degree\nExperience in programming languages such as Java, Python, C++\nGenAI experience\n\nBenefits/Perks\n\nAdditional Information\n\nFully Remote\nVolunteer Time Off\nGreat compensation\nFlexible work schedule\nEligible for 401(k) participation in 90 days\n\nAt Experian, our people and culture set us apart. We're deeply committed to creating an environment where everyone feels they belong and can excel. From inclusion and authenticity to work/life balance, development, wellness, collaboration, and recognition, we focus on what truly matters. Our people-first approach has earned us global recognition: World's Best Workplaces™ 2024 (Fortune Top 25), Great Place To Work™ 2025 in 26 countries, and Glassdoor Best Places to Work 2024, among others.\n\nWant to see what life at Experian is really like? Explore Experian Life on social or visit our Careers Site.\n\nOur compensation reflects the cost of labor across several U.S. geographic markets. The hourly pay range for this position is listed above. Within this range, individual pay is determined by work location and additional factors such as job-related skills, experience, and education.\n\nExperian is proud to be an Equal Opportunity Employer for all groups protected under applicable federal, state and local law, including protected veterans and individuals with disabilities. Innovation is an important part of Experian's DNA and practices, and our inclusive workforce allows everyone to succeed and bring their whole self to work. If you have a disability or special need that requires accommodation, please let us know at the earliest opportunity.\n\n#EarlyCareers",
+      "requirements": [],
+      "url": "https://www.linkedin.com/jobs/view/4318567148/?eBP=BUDGET_EXHAUSTED_JOB&refId=0CG07%2Fbgcg%2BjCAjwaFN%2BZQ%3D%3D&trackingId=liYvcJBMy6%2F%2FH0JjeMTlCg%3D%3D&trk=flagship3_search_srp_jobs",
+      "posted_date": "N/A",
+      "source": "LinkedIn",
+      "scraped_at": "2025-10-23T01:00:49.824463",
+      "skills": [
+        "Python",
+        "Java",
+        "Git",
+        "Ai",
+        "Data Science"
+      ]
+    },
+    {
+      "title": "AI/ML Prompt Scientist/Engineer",
+      "company": "N/A",
+      "location": "N/A",
+      "salary": "Not specified",
+      "job_types": [],
+      "job_type": "Full-time",
+      "experience_level": "Mid-level",
+      "description": "About the job\nSTAND 8 provides end to end IT solutions to enterprise partners across the United States and with offices in Los Angeles, New York, New Jersey, Atlanta, and more including internationally in Mexico and India\nWe're looking for an AI/ML Prompt Scientist/Engineer to design, evaluate, and optimize prompt-based systems that drive real-world impact across cutting-edge AI applications. This position is ideal for a Data Scientist or Machine Learning Engineer with a strong background in prompt optimization and model performance.\nIn this role, you'll combine your expertise in prompt engineering, orchestration frameworks, retrieval pipelines, and evaluation tooling to build scalable, reliable, and safe AI systems in collaboration with AI Engineers and Data Scientists.\nKey Responsibilities\nDesign, optimize, and evaluate prompts and orchestration pipelines to enhance LLM performance and scalability, supporting both Data Scientist and engineering workflows.\nImplement programmatic prompting using frameworks such as LangChain, LlamaIndex, DSPy, Guidance, and LangGraph.\nDefine and manage evaluation frameworks, including A/B testing, human and automated scoring, and model quality assessments using tools such as Ragas, UpTrain, DeepEval, TruLens, Promptfoo, and OpenAI Evals.\nEngineer and maintain context management systems, including conversation memory, retrieval logic, and context compression strategies (chunking, summarization, prioritization).\nDesign and optimize retrieval and RAG pipelines, integrating vector databases (e.g., Weaviate) and rerankers (e.g., Cohere) to enhance relevance and accuracy.\nEstablish observability and traceability mechanisms (e.g., Langfuse) to monitor performance metrics, latency, and operational costs.\nImplement guardrails, safety mechanisms, and bias mitigation policies using frameworks such as Guardrails AI, NeMo Guardrails, Outlines, and Rebuff.\nCollaborate with cross-functional engineering and research teams-including Data Scientists, ML, and AI engineering groups-to ensure high-quality, compliant, and well-documented system delivery.\nQualifications\nProven experience in LLM and NLP model operations, including tokenization, context windows, and safety considerations.\nStrong technical expertise in prompt engineering, orchestration frameworks, and context management.\nHands-on experience with retrieval-augmented generation, evaluation frameworks, and observability tooling.\nUnderstanding of key evaluation metrics such as faithfulness, groundedness, coherence, toxicity, latency, and cost.\nExperience with compliance and ethical AI practices, including bias and hallucination mitigation.\nExcellent analytical, documentation, and communication skills, with the ability to collaborate effectively across teams.\nPreferred Experience\nModel fine-tuning and alignment (e.g., LoRA, DPO/RLHF, preference tuning).\nExperience developing AI agents and integrating tool-use capabilities.\nBenefits\nMedical coverage and Health Savings Account (HSA) through Anthem\nDental/Vision/Various Ancillary coverages through Unum\n401(k) retirement savings plan\nPaid-time-off options\nCompany-paid Employee Assistance Program (EAP)\nDiscount programs through ADP WorkforceNow\nAdditional Details\nThe base range for this contract position is $100,000 - 200,000 / per year, depending on experience. Our pay ranges are determined by role, level, and location. The range displayed on each job posting reflects the minimum and maximum target for new hires of this position across all US locations. Within the range, individual pay is determined by work location and additional factors, including job-related skills, experience, and relevant education or training. Qualified applicants with arrest or conviction records will be considered\n\nAbout Us\nSTAND 8 provides end-to-end IT solutions to enterprise partners across the United States and globally with offices in Los Angeles, Atlanta, New York, Mexico, Japan, India, and more. STAND 8 focuses on the \"bleeding edge\" of technology and leverages automation, process, marketing, and over fifteen years of success and growth to provide a world-class experience for our customers, partners, and employees.\nOur mission is to impact the world positively by creating success through PEOPLE, PROCESS, and TECHNOLOGY.\nCheck out more at www.stand8.io; and reach out today to explore opportunities to grow together! \nBy applying to this position, your data will be processed in accordance with the STAND 8 Privacy Policy.",
+      "requirements": [
+        "retrieval-augmented generation",
+        "compliance and ethical ai practices",
+        "prompt engineering",
+        "prompt engineering"
+      ],
+      "url": "https://www.linkedin.com/jobs/view/4318567148/?eBP=BUDGET_EXHAUSTED_JOB&refId=0CG07%2Fbgcg%2BjCAjwaFN%2BZQ%3D%3D&trackingId=liYvcJBMy6%2F%2FH0JjeMTlCg%3D%3D&trk=flagship3_search_srp_jobs",
+      "posted_date": "N/A",
+      "source": "LinkedIn",
+      "scraped_at": "2025-10-23T01:02:23.671311",
+      "skills": [
+        "Machine Learning",
+        "Ai"
+      ]
+    },
+    {
+      "title": "Junior AI/ML engineer",
+      "company": "N/A",
+      "location": "N/A",
+      "salary": "Not specified",
+      "job_types": [],
+      "job_type": "Full-time",
+      "experience_level": "Mid-level",
+      "description": "About the job\nCompany Description\nDaice Labs is building hybrid AI frameworks that integrate today's models into systems that learn continuously. Founded by MIT CSAIL scientists, we focus on building new architectures by combining LLMs/DL with symbolic reasoning and bio-inspired system design. Operating on two tracks, our Product Lab develops industry-specific solutions for collaborative human teams + AI co-building and co-owning vertical applications, while our Research Lab explores how principles of natural intelligence can guide systems design of new hybrid AI architectures. \nJoin us in taking the next leap in productivity through collaborative innovation.\n\nRole Description\nThis is a full-time remote role for a Junior AI/ML Engineer. The engineer will be responsible for developing, testing, and optimizing AI/ML models with a focus on hybrid AI architectures. Day-to-day tasks include implementing innovative algorithms, conducting experiments to validate models, collaborating with cross-functional teams, and contributing to research on new AI paradigms. The engineer will also be involved in translating research findings into practical applications and building scalable AI solutions.\n\nQualifications\nStrong understanding of Pattern Recognition, Neural Networks, LLMs, agentic architectures\nProficiency in Computer Science and ML Algorithms (proficiency in python and ML stack languages)\nExperience with Statistics\nGood problem-solving skills and the ability to work collaboratively\nExcellent written and verbal communication skills\nBachelor's degree in AI, Machine Learning, Computer Science, or related field\nExperience in bio-inspired system design and hybrid AI architectures is a plus\nAbility to work independently and remotely",
+      "requirements": [
+        "ai",
+        "computer science and ml algorithms (proficiency in python and ml stack languages)\nexperience with statistics\ngood problem-solving skills and the ability to work collaboratively\nexcellent written and verbal communication skills\nbachelor's degree in ai",
+        "statistics\ngood problem-solving skills and the ability to work collaboratively\nexcellent written and verbal communication skills\nbachelor's degree in ai"
+      ],
+      "url": "https://www.linkedin.com/jobs/view/4318567148/?eBP=BUDGET_EXHAUSTED_JOB&refId=0CG07%2Fbgcg%2BjCAjwaFN%2BZQ%3D%3D&trackingId=liYvcJBMy6%2F%2FH0JjeMTlCg%3D%3D&trk=flagship3_search_srp_jobs",
+      "posted_date": "N/A",
+      "source": "LinkedIn",
+      "scraped_at": "2025-10-23T01:03:57.486346",
+      "skills": [
+        "Python",
+        "Machine Learning",
+        "Ai"
+      ]
+    },
+    {
+      "title": "Machine Learning Engineer",
+      "company": "N/A",
+      "location": "N/A",
+      "salary": "Not specified",
+      "job_types": [],
+      "job_type": "Full-time",
+      "experience_level": "Mid-level",
+      "description": "About the job\nFounded in 2009, Zest AI has been pioneering innovative AI technology with a mission to expand credit access to create opportunities for more Americans to pursue their financial goals. Zest AI is transforming the $17 trillion US consumer credit market by delivering AI technology that helps lenders identify creditworthy borrowers overlooked by traditional methods, while leveling the playing field so financial institutions of all sizes can harness AI to provide better lending experiences.\n\nWith over 50 issued and pending patents across automation, accuracy, performance, and model explainability, Zest AI is a leader in financial technology, providing financial institutions with AI tools that create a more resilient US financial system and a stronger U.S. economy. With over 600 active AI models, financial institutions rely on Zest AI's comprehensive suite of solutions spanning marketing, underwriting, fraud detection, lending intelligence, and more to make smarter lending decisions while improving profitability. This US-based technology as a service company is headquartered in Los Angeles, California.\n\nMachine Learning Engineers at Zest AI build software that enables our customers to quickly create, adopt, and operate machine learning models in production. For example, some work might be focused on scale (automating model builds/deployments), while other work might be addressing a specific capability (better model power, clearer model explainability, more desirable fairer model alternatives).\n\nIn this role you will: \nCollaborate on end-to-end development efforts for complex ML/AI-powered solutions—from ideation through deployment—ensuring scalability, reliability, and maintainability.\nDesign experiments/prototypes with cutting-edge techniques aimed at advancing both internal capabilities (e.g., automation pipelines) as well as customer-facing products.\nCollaborate cross-functionally with product management, sales/engagement management teams, data scientists/researchers—and provide thought leadership on how best-in-class ML technologies can address business challenges.\nBuild sophisticated internal tooling frameworks enabling seamless integration between analytics platforms & operationalized models used across departments/customers.\nStay ahead-of-the curve regarding emerging trends within artificial intelligence/machine-learning research fields actively applying them where appropriate toward innovation opportunities aligned w/business objectives\n\nWhat we’re looking for:\n1+ years of hands-on experience (post graduation) building and deploying machine learning systems, with a track record of delivering production-grade solutions beyond classroom or internship projects\nStrong programming fundamentals in Python, with the ability to build reliable, scalable services and tools\nFamiliarity with ML and GenAI frameworks (e.g., PyTorch, Hugging Face, LangChain, Scikit-learn, Pandas) and solid understanding of core ML/LLM concepts (transformers, embeddings, retrieval, evaluation, optimization, etc.)\nComfort with modern software development practices (modular design, version control, testing, CI/CD, code review)\nAbility to write efficient, resource-aware code that handles memory, I/O, and CPU/GPU workloads effectively\nExperience with automation and tooling for data analysis, model evaluation, or workflow orchestration (e.g., Airflow, GitHub Actions, containerization)\nA quantitative degree (Computer Science, Engineering, Physics, Math, or related) — MS/PhD welcome, but not required\nBonus: contributions to open-source projects in GenAI, ML tooling, or automation; GitHub repos or other visible examples of your work\n\nWhat excites you:\nDesigning and deploying GenAI-powered tools and features that help our data scientists, analysts, and customers work smarter\nBuilding tools that make ML development smoother and faster for cross functional partners\nBridging the gap between research and production systems\nContinuously learning and staying curious about new ML methods\nApplying ML to solve real-world problems with real-world impact\n\nPerks and benefits:\nAll Zestys experience:\nThe opportunity to join a mission-focused company\nPeople – the best part of Zest\nRobust medical, dental and vision insurance plans\nAnnual bonus plan participation\n401(k) with generous match\nEmployee Awards and Recognition\n11 company holidays\nWinter break (office closed between Christmas and New Year's Day)\nUnlimited vacation time\nEmployee Resource Groups\nGenerous family leave policy (12 week maternity leave / 6 week paternity leave)\nPhone, internet, wellness, and professional development allowances\nEmployee gatherings, including Town Hall meetings\n\nAdditionally, our Burbank, CA area, hybrid model Zestys enjoy:\nBeautiful, modern, dog-friendly office with lounge areas, video games, and gigantic jigsaw puzzles\nDaily catered lunches from LA’s best restaurants and a fully stocked kitchen\nComplimentary manicures, pedicures, and mindfulness sessions\nCompany happy hours, social events, outings, and much more!\n\nWork Authorization: Applicants must be legally authorized to work in the United States. At this time, Zest is not able to provide visa sponsorship for new hires. **NO C2C**\n\nAbout Zest AI:\nCreating a diverse and inclusive culture where all are welcomed, valued, and empowered to achieve our full potential is important to who we are and where we’re headed in the future. We know that unique backgrounds, experiences, and perspectives help us think bigger, spark innovation, and succeed together. Zest is committed to diversity, equity, and inclusion and encourages professionals from underrepresented groups in technology and financial services to apply.\n\nOur core values are Communication, Collaboration, Bias for Action, Client-centricity, and Heart. Learn more at Zest.ai, follow us on LinkedIn (linkedin.com/company/zest-ai/) or Twitter @Zest_AI, or check out our Insights blog (https://www.zest.ai/cms/insights).",
+      "requirements": [
+        "automation and tooling for data analysis",
+        "ml and genai frameworks (e"
+      ],
+      "url": "https://www.linkedin.com/jobs/view/4318567148/?eBP=BUDGET_EXHAUSTED_JOB&refId=0CG07%2Fbgcg%2BjCAjwaFN%2BZQ%3D%3D&trackingId=liYvcJBMy6%2F%2FH0JjeMTlCg%3D%3D&trk=flagship3_search_srp_jobs",
+      "posted_date": "N/A",
+      "source": "LinkedIn",
+      "scraped_at": "2025-10-23T01:05:31.539687",
+      "skills": [
+        "Python",
+        "Git",
+        "Machine Learning",
+        "Ai",
+        "Pandas",
+        "Pytorch",
+        "Scikit-Learn",
+        "Spark",
+        "Ci/Cd"
+      ]
+    },
+    {
+      "title": "Lead AI and Data Solutions Engineer",
+      "company": "N/A",
+      "location": "N/A",
+      "salary": "Not specified",
+      "job_types": [],
+      "job_type": "Full-time",
+      "experience_level": "Mid-level",
+      "description": "About the job\nJustinBradley's client, an expert in securitization and technology in the housing finance market, is seeking an experienced Lead AI and Data Solution Engineer to drive the development, integration, and deployment of advanced AI, data engineering, and cloud-based solutions.\nThe organization operates one of the largest and most advanced financial technology platforms in the world, managing billions in transactions and supporting critical market infrastructure. Our cloud-based, end-to-end platform powers operations at extraordinary scale, combining deep expertise in financial services with cutting-edge innovation in AI and data engineering.\nThis role requires a hands-on, innovative leader with strong expertise in large language models (LLMs), agentic AI systems, cloud solutions, and data engineering to design secure, scalable, and value-driven AI solutions.\n\nResponsibilities:\nSolution Engineering: Lead the design, development, and deployment of enterprise-scale data and AI solutions aligned with business goals and technical best practices.\nLLM & Agentic AI: Architect, implement, and optimize large language models and agentic AI workflows for automation and decision support.\nFramework Expertise: Build and deploy solutions using LangChain, LangGraph, and n8n for scalable orchestration, workflow automation, and system integration.\nModel Context Protocol (MCP): Design and integrate MCP-based solutions for context management, interpretability, and large-scale deployment.\nCloud & Data Engineering: Leverage AWS (Glue, S3, Lambda, SageMaker, Bedrock, etc.) and Snowflake to create secure, efficient pipelines for structured and unstructured data.\nCollaboration: Work closely with technology, business, legal, risk, and compliance teams to deliver fully integrated solutions.\nInnovation: Stay ahead of trends in AI, data engineering, and cloud computing to drive continuous improvement and innovation.\nGovernance & Compliance: Ensure all solutions adhere to security, compliance, and regulatory standards for financial services.\nMentorship: Provide guidance and mentorship to junior engineers and data professionals.\n\nExperience:\n8+ years of experience in data engineering, AI solution development, or related fields.\nProven expertise in LLMs, agentic AI systems, and Model Context Protocol (MCP).\nExperience building and integrating AI solutions on AWS Bedrock, including prompt engineering, RAG, and enterprise integration.\nStrong hands-on experience with Snowflake and AWS services (Glue, S3, Lambda, SageMaker, etc.).\nBackground in financial services or mortgage technology preferred.\n\nSpecialized Knowledge & Skills:\nDeep knowledge of AI/ML frameworks, cloud-native architectures, and scalable data pipelines.\nExperience in LLM deployment, fine-tuning, and integration.\nExpertise in agentic AI design patterns and MCP-driven solutions.\nStrong understanding of data governance, security, and compliance within regulated industries.\nExcellent communication and collaboration skills with ability to simplify complex concepts for non-technical stakeholders.\nProven ability to drive innovation and deliver enterprise-scale AI solutions.\nBachelor’s or Master’s degree in Computer Science, Data Science, Engineering, or a related field.\n\nJustinBradley is an EO employer - Veterans/Disabled and other protected employees.",
+      "requirements": [
+        "8",
+        "computer science",
+        "snowflake and aws services (glue",
+        "ai/ml frameworks",
+        "financial services with cutting-edge innovation in ai and data engineering",
+        "large language models (llms)",
+        "llms",
+        "agentic ai design patterns and mcp-driven solutions"
+      ],
+      "url": "https://www.linkedin.com/jobs/view/4318567148/?eBP=BUDGET_EXHAUSTED_JOB&refId=0CG07%2Fbgcg%2BjCAjwaFN%2BZQ%3D%3D&trackingId=liYvcJBMy6%2F%2FH0JjeMTlCg%3D%3D&trk=flagship3_search_srp_jobs",
+      "posted_date": "N/A",
+      "source": "LinkedIn",
+      "scraped_at": "2025-10-23T01:07:05.543527",
+      "skills": [
+        "Aws",
+        "Ai",
+        "Data Science"
+      ]
+    }
+  ]
+}

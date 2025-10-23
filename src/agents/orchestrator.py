@@ -3,7 +3,6 @@ from typing import Dict, Any, List
 from src.agents.job_market_agent.job_market_agent import JobMarketAgent
 from src.agents.course_catalog_agent.course_catalog_agent import CourseCatalogAgent
 from src.agents.career_matching_agent.career_matching_agent import CareerMatchingAgent
-from src.agents.project_advisor_agent.project_advisor_agent import ProjectAdvisorAgent
 
 class AgentOrchestrator:
     """
@@ -15,10 +14,14 @@ class AgentOrchestrator:
         """Initialize the Agent Orchestrator with all specialized agents"""
         self.job_market_agent = JobMarketAgent()
         self.course_catalog_agent = CourseCatalogAgent()
-        self.career_matching_agent = CareerMatchingAgent()
-        self.project_advisor_agent = ProjectAdvisorAgent()
+        
+        # Initialize Career Matching Agent with other agents for coordination
+        self.career_matching_agent = CareerMatchingAgent(
+            job_market_agent=self.job_market_agent,
+            course_catalog_agent=self.course_catalog_agent
+        )
 
-    def process_request(self, request: Dict[str, Any]) -> Dict[str, Any]:
+    async def process_request(self, request: Dict[str, Any]) -> Dict[str, Any]:
         """
         Process a user request by coordinating between specialized agents
 
@@ -31,19 +34,21 @@ class AgentOrchestrator:
         request_type = request.get("request_type", "career_advice")
 
         if request_type == "career_advice":
-            return self._process_career_advice_request(request)
+            return await self._process_career_advice_request(request)
         elif request_type == "job_market_analysis":
-            return self._process_job_market_request(request)
+            return await self._process_job_market_request(request)
         elif request_type == "course_search":
             return self._process_course_search_request(request)
-        elif request_type == "project_recommendations":
-            return self._process_project_request(request)
         else:
             return {"error": "Invalid request type"}
 
-    def _process_career_advice_request(self, request: Dict[str, Any]) -> Dict[str, Any]:
+    async def _process_career_advice_request(self, request: Dict[str, Any]) -> Dict[str, Any]:
         """
-        Process a comprehensive career advice request
+        Process a comprehensive career advice request using the Career Matching Agent
+        
+        • Takes user career goals and coordinates with other agents
+        • Analyzes job requirements vs. available coursework
+        • Generates personalized course recommendations with explanations
 
         Args:
             request (Dict[str, Any]): Career advice request
@@ -51,85 +56,61 @@ class AgentOrchestrator:
         Returns:
             Dict[str, Any]: Comprehensive career advice response
         """
-        career_goal = request.get("career_goal", "")
-        location = request.get("location", "")
-        current_skills = request.get("current_skills", [])
-        completed_courses = request.get("completed_courses", [])
-        experience_level = request.get("experience_level", "beginner")
-
-        # Step 1: Get job market data
-        job_market_request = {
-            "job_title": career_goal,
-            "location": location,
-            "limit": 10
-        }
-        job_market_data = self.job_market_agent.process_request(job_market_request)
-
-        # Extract required skills from job market data
-        required_skills = []
-        if "skills" in job_market_data:
-            # Sort skills by count and take top 15
-            required_skills = [
-                skill for skill, count in sorted(
-                    job_market_data["skills"].items(),
-                    key=lambda x: x[1],
-                    reverse=True
-                )[:15]
-            ]
-
-        # Step 2: Get course recommendations
-        career_matching_request = {
-            "career_goal": career_goal,
-            "location": location,
-            "current_skills": current_skills,
-            "completed_courses": completed_courses
-        }
-        career_advice = self.career_matching_agent.process_request(career_matching_request)
-
-        # Step 3: Get course details for recommended courses
-        recommended_courses = career_advice.get("course_recommendations", [])
-        course_codes = [course.get("course_code") for course in recommended_courses if "course_code" in course]
-
-        courses_detail = []
-        for code in course_codes:
-            course_search_request = {
-                "search_term": code
+        print("🎯 Processing career advice request through Career Matching Agent...")
+        
+        # Use the Career Matching Agent to coordinate everything
+        career_matching_response = await self.career_matching_agent.process_request(request)
+        
+        # If Career Matching Agent succeeded, return its comprehensive response
+        if career_matching_response.get("success"):
+            return {
+                "success": True,
+                "career_goal": career_matching_response.get("career_goal"),
+                "location": career_matching_response.get("location"),
+                
+                # Job market insights
+                "job_insights": [
+                    f"Found {career_matching_response['job_market_analysis']['total_jobs']} job opportunities",
+                    f"Average salary: ${career_matching_response['job_market_analysis']['salary_info'].get('overall_average', 0):,.0f}",
+                    f"Top trending skills: {', '.join(career_matching_response['job_market_analysis']['trending_skills'][:3])}"
+                ],
+                
+                # Skill gap analysis
+                "skill_analysis": {
+                    "current_coverage": f"{career_matching_response['skill_gap_analysis']['skill_coverage']:.1f}%",
+                    "skills_to_develop": career_matching_response['skill_gap_analysis']['skills_to_develop'],
+                    "missing_skills": [skill['skill'] for skill in career_matching_response['skill_gap_analysis']['missing_skills'][:5]]
+                },
+                
+                # Course recommendations with explanations
+                "course_recommendations": career_matching_response.get("course_recommendations", []),
+                
+                # Learning path
+                "learning_path": career_matching_response.get("learning_path", {}),
+                
+                # Summary
+                "summary": {
+                    "total_courses_recommended": career_matching_response.get("total_recommended_courses", 0),
+                    "estimated_completion": career_matching_response.get("estimated_completion_time", "Unknown"),
+                    "next_steps": [
+                        "Review the recommended courses and their explanations",
+                        "Check prerequisites for your first semester courses", 
+                        "Consider your current schedule and course load",
+                        "Meet with an academic advisor to finalize your plan"
+                    ]
+                }
             }
-            course_results = self.course_catalog_agent.process_request(course_search_request)
-            if "courses" in course_results and course_results["courses"]:
-                courses_detail.extend(course_results["courses"])
-
-        # Step 4: Get project recommendations
-        target_skills = [
-            skill for skill in required_skills
-            if skill not in current_skills
-        ]
-
-        project_request = {
-            "career_goal": career_goal,
-            "technical_skills": current_skills,
-            "target_skills": target_skills,
-            "courses": courses_detail,
-            "experience_level": experience_level
-        }
-        project_advice = self.project_advisor_agent.process_request(project_request)
-
-        # Step 5: Compile comprehensive response
+        
+        # Fallback if Career Matching Agent failed
         return {
-            "career_goal": career_goal,
-            "job_market_analysis": {
-                "required_skills": required_skills,
-                "salary_information": job_market_data.get("salaries", {}),
-                "trends": job_market_data.get("trends", [])
-            },
-            "course_recommendations": career_advice.get("course_recommendations", []),
-            "learning_path": career_advice.get("learning_path", {}),
-            "project_recommendations": project_advice.get("projects", []),
-            "technology_recommendations": project_advice.get("technologies", {}),
-            "portfolio_guidance": project_advice.get("portfolio_guidance", {})
+            "success": False,
+            "error": "Career matching analysis failed",
+            "career_goal": request.get("career_goal", ""),
+            "location": request.get("location", ""),
+            "message": "Please try again or contact support"
         }
 
-    def _process_job_market_request(self, request: Dict[str, Any]) -> Dict[str, Any]:
+    async def _process_job_market_request(self, request: Dict[str, Any]) -> Dict[str, Any]:
         """
         Process a job market analysis request
 
@@ -139,7 +120,7 @@ class AgentOrchestrator:
         Returns:
             Dict[str, Any]: Job market analysis
         """
-        return self.job_market_agent.process_request(request)
+        return await self.job_market_agent.process_request(request)
 
     def _process_course_search_request(self, request: Dict[str, Any]) -> Dict[str, Any]:
         """
@@ -153,18 +134,6 @@ class AgentOrchestrator:
         """
         return self.course_catalog_agent.process_request(request)
 
-    def _process_project_request(self, request: Dict[str, Any]) -> Dict[str, Any]:
-        """
-        Process a project recommendation request
-
-        Args:
-            request (Dict[str, Any]): Project recommendation request
-
-        Returns:
-            Dict[str, Any]: Project recommendations
-        """
-        return self.project_advisor_agent.process_request(request)
-
     def get_agent_capabilities(self) -> Dict[str, List[str]]:
         """
         Get capabilities of all agents
@@ -175,6 +144,5 @@ class AgentOrchestrator:
         return {
             "job_market_agent": self.job_market_agent.get_capabilities(),
             "course_catalog_agent": self.course_catalog_agent.get_capabilities(),
-            "career_matching_agent": self.career_matching_agent.get_capabilities(),
-            "project_advisor_agent": self.project_advisor_agent.get_capabilities()
+            "career_matching_agent": self.career_matching_agent.get_capabilities()
         }

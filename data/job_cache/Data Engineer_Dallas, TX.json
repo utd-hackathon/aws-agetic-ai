@@ -1,0 +1,84 @@
+{
+  "job_title": "Data Engineer",
+  "location": "Dallas, TX",
+  "job_count": 2,
+  "skills": {
+    "Python": 4,
+    "Azure": 2,
+    "Ai": 2,
+    "AI": 2,
+    "Java": 2,
+    "Git": 2,
+    "Machine Learning": 2,
+    "Pandas": 2,
+    "Sql": 1,
+    "SQL": 1,
+    "Numpy": 1,
+    "Tensorflow": 1,
+    "Pytorch": 1,
+    "Scikit-Learn": 1,
+    "NumPy": 1,
+    "TensorFlow": 1,
+    "PyTorch": 1,
+    "Scikit-learn": 1
+  },
+  "salaries": {
+    "count": 0,
+    "average_min": 0,
+    "average_max": 0,
+    "overall_average": 0
+  },
+  "trends": [
+    {
+      "skill": "Python",
+      "count": 4,
+      "score": 4
+    },
+    {
+      "skill": "Azure",
+      "count": 2,
+      "score": 2
+    },
+    {
+      "skill": "Ai",
+      "count": 2,
+      "score": 2
+    },
+    {
+      "skill": "AI",
+      "count": 2,
+      "score": 2
+    },
+    {
+      "skill": "Java",
+      "count": 2,
+      "score": 2
+    },
+    {
+      "skill": "Git",
+      "count": 2,
+      "score": 2
+    },
+    {
+      "skill": "Machine Learning",
+      "count": 2,
+      "score": 2
+    },
+    {
+      "skill": "Pandas",
+      "count": 2,
+      "score": 2
+    },
+    {
+      "skill": "Sql",
+      "count": 1,
+      "score": 1
+    },
+    {
+      "skill": "SQL",
+      "count": 1,
+      "score": 1
+    }
+  ],
+  "scraped_at": "2025-10-23T05:54:10.719957"
+}

@@ -1,0 +1,70 @@
+{
+  "job_title": "I want to become a Management Consultant",
+  "location": "Dallas, TX",
+  "job_count": 2,
+  "skills": {
+    "Python": 2,
+    "Machine Learning": 1,
+    "SQL": 1,
+    "AWS": 1,
+    "Docker": 1,
+    "JavaScript": 1,
+    "React": 1,
+    "PostgreSQL": 1,
+    "Kubernetes": 1
+  },
+  "salaries": {
+    "count": 2,
+    "average_min": 75000.0,
+    "average_max": 115000.0,
+    "overall_average": 95000.0
+  },
+  "trends": [
+    {
+      "skill": "Python",
+      "count": 2,
+      "score": 2
+    },
+    {
+      "skill": "Machine Learning",
+      "count": 1,
+      "score": 1
+    },
+    {
+      "skill": "SQL",
+      "count": 1,
+      "score": 1
+    },
+    {
+      "skill": "AWS",
+      "count": 1,
+      "score": 1
+    },
+    {
+      "skill": "Docker",
+      "count": 1,
+      "score": 1
+    },
+    {
+      "skill": "JavaScript",
+      "count": 1,
+      "score": 1
+    },
+    {
+      "skill": "React",
+      "count": 1,
+      "score": 1
+    },
+    {
+      "skill": "PostgreSQL",
+      "count": 1,
+      "score": 1
+    },
+    {
+      "skill": "Kubernetes",
+      "count": 1,
+      "score": 1
+    }
+  ],
+  "scraped_at": "2025-10-23T07:41:13.913345"
+}

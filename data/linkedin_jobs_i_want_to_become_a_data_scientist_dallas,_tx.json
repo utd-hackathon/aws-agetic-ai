@@ -1,0 +1,55 @@
+{
+  "metadata": {
+    "scraped_at": "2025-10-23T02:05:19.060699",
+    "total_jobs": 2,
+    "job_title": "I want to become a data scientist",
+    "location": "Dallas, TX",
+    "source": "LinkedIn Selenium Scraper",
+    "version": "1.0"
+  },
+  "jobs": [
+    {
+      "title": "Data Analyst Internship",
+      "company": "N/A",
+      "location": "N/A",
+      "salary": "Not specified",
+      "job_types": [],
+      "job_type": "Full-time",
+      "experience_level": "Mid-level",
+      "description": "About the job\nAbout ConnectPrep: Our goal is to redefine \"tutoring\" - to use data, insight, and our extensive teaching experience find solutions for our students. ConnectPrep is about connecting - connecting students, parents, educators, and the community. We have bold ideas and an eye towards the future.\n\nThe Opportunity: We are offering a Data Analyst Internship for qualified candidates. This is a cross-disciplinary role, both instructional and technical. You'll engage with our team of educators to validate and iterate the models that drive our analytics. Our Data Analysts develop an understanding of our algorithms, the technologies and platforms that support our products, and our proprietary educational content. This knowledge will then be synthesized into actionable tests to build modules that will assist in identifying the academic needs of each individual student. You will engage with team members that think outside of the box, with the goal of improving education through the creation of a data infrastructure and insightful analytics.\n\nRequirements\n\nWhat we are looking for:\n\nCreative problem solving, strong math/quantitative skills, and attention to detail \nA background in Applied Mathematics, Statistics, or Computer Science \nAbility to brainstorm ways we can use our product to collect data that provides insight into the needs of our students\nExperience with SQL, Pandas, or other fast analysis language\nExperience in data analysis or building pipeline tools in Python\nSome coding background and a strong interest in technology\nAdvanced Excel skills (Advanced Formulas)\nTables & Formatting\nConditional Formatting\nAdvanced Charting\nPivot tables & Pivot Reporting\nVBA & Macros\nUsing Excel Productively\nData Tables, Simulations & Solver\n\nBenefits\n\nWhy join ConnectPrep?\n\nGet in on the ground floor of an exciting new company, with the potential to help shape our direction\nBe involved with a team that has bold ideas, with the goal of reinventing education across the globe\nGain valuable experience, meet technology innovators, and learn about the business side of our company\n\nSound Interesting?\n\nPlease submit your resume and letter of interest at careers@connectprep.com.\n\nAll applicants must be a U.S. Citizen or National of the U.S., an alien lawfully admitted for permanent residence, or an alien authorized to work in the U.S. for this employer. ConnectPrep is an equal opportunity employer EEO/M/F/D/V.",
+      "requirements": [
+        "sql",
+        "math/quantitative ",
+        "interest in technology\nadvanced excel "
+      ],
+      "url": "https://www.linkedin.com/jobs/view/4314439405/?eBP=NOT_ELIGIBLE_FOR_CHARGING&refId=ITHP8dvDX00%2BIUeNsZmsyw%3D%3D&trackingId=dU%2BndHuNNVs2ifzRxb7ibA%3D%3D&trk=flagship3_search_srp_jobs",
+      "posted_date": "N/A",
+      "source": "LinkedIn",
+      "scraped_at": "2025-10-23T02:03:46.557082",
+      "skills": [
+        "Python",
+        "Sql",
+        "Ai",
+        "Pandas"
+      ]
+    },
+    {
+      "title": "Data Scientist",
+      "company": "N/A",
+      "location": "N/A",
+      "salary": "Not specified",
+      "job_types": [],
+      "job_type": "Full-time",
+      "experience_level": "Mid-level",
+      "description": "About the job\nExciting Career Opportunity - Join Our Team!\n\nWe are looking for dedicated and motivated individuals to join our team and contribute to our continued success. This position offers a chance to grow professionally in a supportive and inclusive environment, with flexibility and long-term career potential.\n\nEmployment Type: Full-Time / Part-Time\n\nSalary Range: Competitive, based on experience and qualifications\n\nJob Summary\n\nThe ideal candidate will perform a range of tasks to support daily operations, contribute to team goals, and uphold our standards of excellence. This role requires a proactive attitude, a willingness to learn, and a commitment to quality and professionalism.\n\nKey Responsibilities\n\n Support day-to-day operations and team functions\n Maintain accuracy and attention to detail in assigned tasks\n Communicate effectively with team members and clients\n Adhere to company policies, procedures, and deadlines\n Take initiative and show flexibility in handling tasks\n Contribute to a positive and respectful work culture\n\nQualifications\n\n High school diploma or equivalent (college degree a plus)\n Basic computer and communication skills\n Strong organizational and time management abilities\n Ability to work independently or as part of a team\n Adaptable and willing to learn new tools or systems\n Reliable and responsible work ethic\n\nBenefits\n\n Competitive salary with opportunities for increases\n Flexible work hours and remote options (if applicable)\n Opportunities for career growth and advancement\n Ongoing training and development\n Health, dental, and vision insurance (if applicable)\n Paid time off and holiday benefits\n Employee support programs and recognition\n\nTake the next step in your career and apply today. We are excited to learn more about you!\n\nDesired Skills and Experience\nTyping",
+      "requirements": [],
+      "url": "https://www.linkedin.com/jobs/view/4314439405/?eBP=NOT_ELIGIBLE_FOR_CHARGING&refId=ITHP8dvDX00%2BIUeNsZmsyw%3D%3D&trackingId=dU%2BndHuNNVs2ifzRxb7ibA%3D%3D&trk=flagship3_search_srp_jobs",
+      "posted_date": "N/A",
+      "source": "LinkedIn",
+      "scraped_at": "2025-10-23T02:05:19.060035",
+      "skills": [
+        "Ai"
+      ]
+    }
+  ]
+}

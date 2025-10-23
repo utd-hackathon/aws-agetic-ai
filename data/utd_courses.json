@@ -1,0 +1,1344 @@
+{
+  "metadata": {
+    "scraped_at": "2025-10-23T02:54:36Z",
+    "total_courses": 70,
+    "departments": [
+      "ACCT",
+      "BA",
+      "BIOL",
+      "CHEM",
+      "COMM",
+      "CS",
+      "ECON",
+      "FIN",
+      "MATH",
+      "MGMT",
+      "MIS",
+      "MKTG",
+      "NSC",
+      "OPRE",
+      "PHYS",
+      "PSYC",
+      "SE",
+      "STAT"
+    ],
+    "version": "3.0"
+  },
+  "courses": [
+    {
+      "course_code": "CS 1336",
+      "title": "Programming Fundamentals",
+      "description": "Introduction to programming concepts using Python. Covers variables, control structures, functions, and basic data structures.",
+      "credits": 3,
+      "prerequisites": [],
+      "corequisites": [],
+      "department": "CS",
+      "skills": [
+        "Python",
+        "Programming",
+        "Problem Solving",
+        "Algorithms",
+        "Data Structures"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "CS 1337",
+      "title": "Computer Science I",
+      "description": "Object-oriented programming in Java. Covers classes, inheritance, polymorphism, and basic algorithms.",
+      "credits": 3,
+      "prerequisites": [
+        "CS 1336"
+      ],
+      "corequisites": [],
+      "department": "CS",
+      "skills": [
+        "Java",
+        "Object-Oriented Programming",
+        "Data Structures",
+        "Algorithms",
+        "Software Design"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "CS 2336",
+      "title": "Computer Science II",
+      "description": "Advanced programming concepts including recursion, sorting algorithms, and data structures like linked lists and trees.",
+      "credits": 3,
+      "prerequisites": [
+        "CS 1337"
+      ],
+      "corequisites": [],
+      "department": "CS",
+      "skills": [
+        "Java",
+        "Data Structures",
+        "Algorithms",
+        "Recursion",
+        "Sorting",
+        "Trees",
+        "Linked Lists"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "CS 3345",
+      "title": "Data Structures and Algorithms",
+      "description": "Advanced data structures including heaps, hash tables, graphs, and algorithm analysis.",
+      "credits": 3,
+      "prerequisites": [
+        "CS 2336",
+        "MATH 2414"
+      ],
+      "corequisites": [],
+      "department": "CS",
+      "skills": [
+        "Data Structures",
+        "Algorithms",
+        "Complexity Analysis",
+        "Graphs",
+        "Hash Tables",
+        "Heaps"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "CS 4347",
+      "title": "Database Systems",
+      "description": "Database design, SQL, normalization, indexing, and database management systems.",
+      "credits": 3,
+      "prerequisites": [
+        "CS 3345"
+      ],
+      "corequisites": [],
+      "department": "CS",
+      "skills": [
+        "SQL",
+        "Database Design",
+        "Normalization",
+        "Indexing",
+        "MySQL",
+        "PostgreSQL",
+        "Database Management"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "CS 4348",
+      "title": "Operating Systems",
+      "description": "Operating system concepts including processes, threads, memory management, and file systems.",
+      "credits": 3,
+      "prerequisites": [
+        "CS 3345"
+      ],
+      "corequisites": [],
+      "department": "CS",
+      "skills": [
+        "Operating Systems",
+        "Process Management",
+        "Memory Management",
+        "File Systems",
+        "Concurrency",
+        "Linux"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "CS 4352",
+      "title": "Human-Computer Interactions",
+      "description": "User interface design, usability testing, and human factors in computing.",
+      "credits": 3,
+      "prerequisites": [
+        "CS 3345"
+      ],
+      "corequisites": [],
+      "department": "CS",
+      "skills": [
+        "UI/UX Design",
+        "Usability Testing",
+        "Human-Computer Interaction",
+        "User Research",
+        "Prototyping"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "CS 4353",
+      "title": "Computer Networks",
+      "description": "Network protocols, TCP/IP, routing, and network security fundamentals.",
+      "credits": 3,
+      "prerequisites": [
+        "CS 3345"
+      ],
+      "corequisites": [],
+      "department": "CS",
+      "skills": [
+        "Networking",
+        "TCP/IP",
+        "Network Security",
+        "Routing",
+        "Protocols",
+        "Network Administration"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "CS 4354",
+      "title": "Software Engineering",
+      "description": "Software development lifecycle, requirements analysis, design patterns, and project management.",
+      "credits": 3,
+      "prerequisites": [
+        "CS 3345"
+      ],
+      "corequisites": [],
+      "department": "CS",
+      "skills": [
+        "Software Engineering",
+        "Design Patterns",
+        "Project Management",
+        "Requirements Analysis",
+        "Agile",
+        "Software Testing"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "CS 4355",
+      "title": "Artificial Intelligence",
+      "description": "Introduction to AI concepts including search algorithms, machine learning, and knowledge representation.",
+      "credits": 3,
+      "prerequisites": [
+        "CS 3345",
+        "MATH 2414"
+      ],
+      "corequisites": [],
+      "department": "CS",
+      "skills": [
+        "Artificial Intelligence",
+        "Machine Learning",
+        "Search Algorithms",
+        "Knowledge Representation",
+        "Neural Networks",
+        "Python"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "CS 4356",
+      "title": "Machine Learning",
+      "description": "Machine learning algorithms, neural networks, and data mining techniques.",
+      "credits": 3,
+      "prerequisites": [
+        "CS 4355",
+        "STAT 4351"
+      ],
+      "corequisites": [],
+      "department": "CS",
+      "skills": [
+        "Machine Learning",
+        "Neural Networks",
+        "Data Mining",
+        "Python",
+        "Scikit-learn",
+        "TensorFlow",
+        "Statistics"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "CS 4357",
+      "title": "Computer Vision",
+      "description": "Image processing, feature detection, and computer vision applications.",
+      "credits": 3,
+      "prerequisites": [
+        "CS 4356"
+      ],
+      "corequisites": [],
+      "department": "CS",
+      "skills": [
+        "Computer Vision",
+        "Image Processing",
+        "OpenCV",
+        "Feature Detection",
+        "Deep Learning",
+        "Python"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "CS 4358",
+      "title": "Natural Language Processing",
+      "description": "Text processing, language models, and NLP applications.",
+      "credits": 3,
+      "prerequisites": [
+        "CS 4356"
+      ],
+      "corequisites": [],
+      "department": "CS",
+      "skills": [
+        "Natural Language Processing",
+        "Text Processing",
+        "Language Models",
+        "NLP",
+        "Python",
+        "NLTK",
+        "spaCy"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "CS 4359",
+      "title": "Data Science",
+      "description": "Data analysis, visualization, and statistical modeling for data science applications.",
+      "credits": 3,
+      "prerequisites": [
+        "CS 4356",
+        "STAT 4351"
+      ],
+      "corequisites": [],
+      "department": "CS",
+      "skills": [
+        "Data Science",
+        "Data Analysis",
+        "Data Visualization",
+        "Statistics",
+        "Python",
+        "Pandas",
+        "NumPy",
+        "Matplotlib"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "CS 4361",
+      "title": "Web Programming",
+      "description": "Web development using HTML, CSS, JavaScript, and server-side technologies.",
+      "credits": 3,
+      "prerequisites": [
+        "CS 3345"
+      ],
+      "corequisites": [],
+      "department": "CS",
+      "skills": [
+        "Web Development",
+        "HTML",
+        "CSS",
+        "JavaScript",
+        "Node.js",
+        "React",
+        "Web APIs",
+        "Frontend Development"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "CS 4365",
+      "title": "Computer Graphics",
+      "description": "Graphics programming, 3D modeling, and rendering techniques.",
+      "credits": 3,
+      "prerequisites": [
+        "CS 3345",
+        "MATH 2414"
+      ],
+      "corequisites": [],
+      "department": "CS",
+      "skills": [
+        "Computer Graphics",
+        "3D Modeling",
+        "Rendering",
+        "OpenGL",
+        "C++",
+        "Mathematics",
+        "Visualization"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "CS 4366",
+      "title": "Mobile Application Development",
+      "description": "Mobile app development for iOS and Android platforms.",
+      "credits": 3,
+      "prerequisites": [
+        "CS 3345"
+      ],
+      "corequisites": [],
+      "department": "CS",
+      "skills": [
+        "Mobile Development",
+        "iOS",
+        "Android",
+        "React Native",
+        "Swift",
+        "Kotlin",
+        "Mobile UI/UX"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "CS 4367",
+      "title": "Game Development",
+      "description": "Game programming, game engines, and interactive media development.",
+      "credits": 3,
+      "prerequisites": [
+        "CS 3345"
+      ],
+      "corequisites": [],
+      "department": "CS",
+      "skills": [
+        "Game Development",
+        "Unity",
+        "C#",
+        "Game Design",
+        "3D Graphics",
+        "Game Physics",
+        "Interactive Media"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "CS 4368",
+      "title": "Cybersecurity",
+      "description": "Security principles, cryptography, and secure software development.",
+      "credits": 3,
+      "prerequisites": [
+        "CS 3345"
+      ],
+      "corequisites": [],
+      "department": "CS",
+      "skills": [
+        "Cybersecurity",
+        "Cryptography",
+        "Security",
+        "Penetration Testing",
+        "Security Analysis",
+        "Secure Coding"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "CS 4369",
+      "title": "Cloud Computing",
+      "description": "Cloud platforms, distributed systems, and cloud-native application development.",
+      "credits": 3,
+      "prerequisites": [
+        "CS 3345"
+      ],
+      "corequisites": [],
+      "department": "CS",
+      "skills": [
+        "Cloud Computing",
+        "AWS",
+        "Azure",
+        "Docker",
+        "Kubernetes",
+        "Microservices",
+        "Distributed Systems"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "CS 4370",
+      "title": "Big Data Analytics",
+      "description": "Large-scale data processing, Hadoop, Spark, and distributed computing.",
+      "credits": 3,
+      "prerequisites": [
+        "CS 4359"
+      ],
+      "corequisites": [],
+      "department": "CS",
+      "skills": [
+        "Big Data",
+        "Hadoop",
+        "Spark",
+        "Distributed Computing",
+        "Data Processing",
+        "Scalability",
+        "Python"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "MATH 2413",
+      "title": "Calculus I",
+      "description": "Differential calculus including limits, derivatives, and applications.",
+      "credits": 4,
+      "prerequisites": [],
+      "corequisites": [],
+      "department": "MATH",
+      "skills": [
+        "Calculus",
+        "Mathematics",
+        "Derivatives",
+        "Limits",
+        "Problem Solving",
+        "Mathematical Analysis"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "MATH 2414",
+      "title": "Calculus II",
+      "description": "Integral calculus including integration techniques and applications.",
+      "credits": 4,
+      "prerequisites": [
+        "MATH 2413"
+      ],
+      "corequisites": [],
+      "department": "MATH",
+      "skills": [
+        "Calculus",
+        "Integration",
+        "Mathematics",
+        "Mathematical Analysis",
+        "Problem Solving"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "STAT 4351",
+      "title": "Probability and Statistics",
+      "description": "Probability theory, statistical inference, and data analysis methods.",
+      "credits": 3,
+      "prerequisites": [
+        "MATH 2414"
+      ],
+      "corequisites": [],
+      "department": "STAT",
+      "skills": [
+        "Statistics",
+        "Probability",
+        "Data Analysis",
+        "Statistical Inference",
+        "Mathematics",
+        "R"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "SE 4351",
+      "title": "Software Requirements Engineering",
+      "description": "Requirements gathering, analysis, and specification for software projects.",
+      "credits": 3,
+      "prerequisites": [
+        "CS 3345"
+      ],
+      "corequisites": [],
+      "department": "SE",
+      "skills": [
+        "Requirements Engineering",
+        "Software Analysis",
+        "Project Management",
+        "Documentation",
+        "Stakeholder Communication"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "FIN 3320",
+      "title": "Business Finance",
+      "description": "Introduction to corporate finance including financial analysis, capital budgeting, and financial planning.",
+      "credits": 3,
+      "prerequisites": [
+        "ACCT 2301"
+      ],
+      "corequisites": [],
+      "department": "FIN",
+      "skills": [
+        "Financial Analysis",
+        "Capital Budgeting",
+        "Financial Planning",
+        "Corporate Finance"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "ACCT 2301",
+      "title": "Introduction to Financial Accounting",
+      "description": "Fundamental principles of financial accounting including financial statements and analysis.",
+      "credits": 3,
+      "prerequisites": [],
+      "corequisites": [],
+      "department": "ACCT",
+      "skills": [
+        "Financial Accounting",
+        "Financial Statements",
+        "Financial Analysis",
+        "Accounting Principles"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "ACCT 2302",
+      "title": "Introduction to Managerial Accounting",
+      "description": "Managerial accounting concepts including cost analysis, budgeting, and performance evaluation.",
+      "credits": 3,
+      "prerequisites": [
+        "ACCT 2301"
+      ],
+      "corequisites": [],
+      "department": "ACCT",
+      "skills": [
+        "Managerial Accounting",
+        "Cost Analysis",
+        "Budgeting",
+        "Performance Analysis"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "ECON 2301",
+      "title": "Principles of Macroeconomics",
+      "description": "Introduction to macroeconomic theory including national income, inflation, and monetary policy.",
+      "credits": 3,
+      "prerequisites": [],
+      "corequisites": [],
+      "department": "ECON",
+      "skills": [
+        "Macroeconomics",
+        "Economic Analysis",
+        "Monetary Policy",
+        "Economic Theory"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "ECON 2302",
+      "title": "Principles of Microeconomics",
+      "description": "Introduction to microeconomic theory including supply and demand, market structures, and consumer behavior.",
+      "credits": 3,
+      "prerequisites": [],
+      "corequisites": [],
+      "department": "ECON",
+      "skills": [
+        "Microeconomics",
+        "Market Analysis",
+        "Consumer Behavior",
+        "Economic Theory"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "STAT 3355",
+      "title": "Introduction to Statistics for Business",
+      "description": "Statistical methods for business applications including hypothesis testing and regression analysis.",
+      "credits": 3,
+      "prerequisites": [
+        "MATH 1325"
+      ],
+      "corequisites": [],
+      "department": "STAT",
+      "skills": [
+        "Business Statistics",
+        "Hypothesis Testing",
+        "Regression Analysis",
+        "Data Analysis"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "FIN 4320",
+      "title": "Investment Analysis",
+      "description": "Analysis of investment securities including portfolio theory and risk management.",
+      "credits": 3,
+      "prerequisites": [
+        "FIN 3320"
+      ],
+      "corequisites": [],
+      "department": "FIN",
+      "skills": [
+        "Investment Analysis",
+        "Portfolio Management",
+        "Risk Management",
+        "Securities Analysis"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "BA 3351",
+      "title": "Business Analytics",
+      "description": "Introduction to business analytics including data mining, predictive modeling, and decision analysis.",
+      "credits": 3,
+      "prerequisites": [
+        "STAT 3355"
+      ],
+      "corequisites": [],
+      "department": "BA",
+      "skills": [
+        "Business Analytics",
+        "Data Mining",
+        "Predictive Modeling",
+        "Decision Analysis"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "FIN 3300",
+      "title": "Corporate Finance",
+      "description": "Advanced corporate finance topics including capital structure, dividend policy, and financial strategy.",
+      "credits": 3,
+      "prerequisites": [
+        "FIN 3320"
+      ],
+      "corequisites": [],
+      "department": "FIN",
+      "skills": [
+        "Corporate Finance",
+        "Capital Structure",
+        "Financial Strategy",
+        "Valuation"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "FIN 4300",
+      "title": "Financial Markets and Institutions",
+      "description": "Study of financial markets, institutions, and instruments including banking and investment management.",
+      "credits": 3,
+      "prerequisites": [
+        "FIN 3320"
+      ],
+      "corequisites": [],
+      "department": "FIN",
+      "skills": [
+        "Financial Markets",
+        "Banking",
+        "Investment Management",
+        "Risk Assessment"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "ACCT 3331",
+      "title": "Intermediate Financial Accounting I",
+      "description": "In-depth study of financial accounting theory and practice including revenue recognition and asset valuation.",
+      "credits": 3,
+      "prerequisites": [
+        "ACCT 2301"
+      ],
+      "corequisites": [],
+      "department": "ACCT",
+      "skills": [
+        "Advanced Accounting",
+        "Revenue Recognition",
+        "Asset Valuation",
+        "Financial Reporting"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "ACCT 3332",
+      "title": "Intermediate Financial Accounting II",
+      "description": "Continuation of intermediate accounting covering liabilities, equity, and cash flow statements.",
+      "credits": 3,
+      "prerequisites": [
+        "ACCT 3331"
+      ],
+      "corequisites": [],
+      "department": "ACCT",
+      "skills": [
+        "Liability Accounting",
+        "Equity Accounting",
+        "Cash Flow Analysis",
+        "Financial Statements"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "ACCT 4334",
+      "title": "Cost Accounting",
+      "description": "Cost accounting systems, cost behavior analysis, and performance measurement for management decisions.",
+      "credits": 3,
+      "prerequisites": [
+        "ACCT 2302"
+      ],
+      "corequisites": [],
+      "department": "ACCT",
+      "skills": [
+        "Cost Accounting",
+        "Cost Analysis",
+        "Performance Measurement",
+        "Management Accounting"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "ECON 3310",
+      "title": "Intermediate Microeconomics",
+      "description": "Advanced microeconomic theory including consumer choice, firm behavior, and market structures.",
+      "credits": 3,
+      "prerequisites": [
+        "ECON 2302",
+        "MATH 1325"
+      ],
+      "corequisites": [],
+      "department": "ECON",
+      "skills": [
+        "Microeconomic Theory",
+        "Market Analysis",
+        "Consumer Theory",
+        "Firm Theory"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "ECON 3311",
+      "title": "Intermediate Macroeconomics",
+      "description": "Advanced macroeconomic theory including economic growth, business cycles, and monetary policy.",
+      "credits": 3,
+      "prerequisites": [
+        "ECON 2301",
+        "MATH 1325"
+      ],
+      "corequisites": [],
+      "department": "ECON",
+      "skills": [
+        "Macroeconomic Theory",
+        "Economic Growth",
+        "Monetary Policy",
+        "Fiscal Policy"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "ECON 4350",
+      "title": "Econometrics",
+      "description": "Statistical methods for economic analysis including regression analysis and hypothesis testing.",
+      "credits": 3,
+      "prerequisites": [
+        "ECON 2301",
+        "STAT 3355"
+      ],
+      "corequisites": [],
+      "department": "ECON",
+      "skills": [
+        "Econometrics",
+        "Regression Analysis",
+        "Statistical Analysis",
+        "Economic Modeling"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "BA 4320",
+      "title": "Advanced Business Analytics",
+      "description": "Advanced analytics techniques including machine learning applications in business contexts.",
+      "credits": 3,
+      "prerequisites": [
+        "BA 3351"
+      ],
+      "corequisites": [],
+      "department": "BA",
+      "skills": [
+        "Advanced Analytics",
+        "Machine Learning",
+        "Business Intelligence",
+        "Data Visualization"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "STAT 4355",
+      "title": "Applied Regression Analysis",
+      "description": "Multiple regression analysis, model building, and statistical inference for business applications.",
+      "credits": 3,
+      "prerequisites": [
+        "STAT 3355"
+      ],
+      "corequisites": [],
+      "department": "STAT",
+      "skills": [
+        "Regression Analysis",
+        "Statistical Modeling",
+        "Model Building",
+        "Statistical Inference"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "STAT 4382",
+      "title": "Statistical Learning and Data Mining",
+      "description": "Statistical learning methods including classification, clustering, and predictive modeling.",
+      "credits": 3,
+      "prerequisites": [
+        "STAT 4351"
+      ],
+      "corequisites": [],
+      "department": "STAT",
+      "skills": [
+        "Statistical Learning",
+        "Data Mining",
+        "Classification",
+        "Predictive Modeling"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "MGMT 3300",
+      "title": "Organizational Behavior",
+      "description": "Study of individual and group behavior in organizations including leadership and team dynamics.",
+      "credits": 3,
+      "prerequisites": [],
+      "corequisites": [],
+      "department": "MGMT",
+      "skills": [
+        "Leadership",
+        "Team Management",
+        "Organizational Behavior",
+        "Communication"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "OPRE 3310",
+      "title": "Operations Management",
+      "description": "Design and management of operations including process improvement and supply chain management.",
+      "credits": 3,
+      "prerequisites": [
+        "STAT 3355"
+      ],
+      "corequisites": [],
+      "department": "OPRE",
+      "skills": [
+        "Operations Management",
+        "Process Improvement",
+        "Supply Chain",
+        "Quality Management"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "OPRE 4320",
+      "title": "Supply Chain Management",
+      "description": "Strategic management of supply chains including logistics, procurement, and vendor management.",
+      "credits": 3,
+      "prerequisites": [
+        "OPRE 3310"
+      ],
+      "corequisites": [],
+      "department": "OPRE",
+      "skills": [
+        "Supply Chain Management",
+        "Logistics",
+        "Procurement",
+        "Vendor Management"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "MKTG 3300",
+      "title": "Principles of Marketing",
+      "description": "Fundamental marketing concepts including market research, consumer behavior, and marketing strategy.",
+      "credits": 3,
+      "prerequisites": [],
+      "corequisites": [],
+      "department": "MKTG",
+      "skills": [
+        "Marketing Strategy",
+        "Market Research",
+        "Consumer Behavior",
+        "Brand Management"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "MKTG 4330",
+      "title": "Digital Marketing Analytics",
+      "description": "Analytics for digital marketing including web analytics, social media metrics, and campaign optimization.",
+      "credits": 3,
+      "prerequisites": [
+        "MKTG 3300",
+        "BA 3351"
+      ],
+      "corequisites": [],
+      "department": "MKTG",
+      "skills": [
+        "Digital Marketing",
+        "Web Analytics",
+        "Social Media Analytics",
+        "Campaign Optimization"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "MIS 3300",
+      "title": "Management Information Systems",
+      "description": "Information systems in business including database management, system analysis, and IT strategy.",
+      "credits": 3,
+      "prerequisites": [],
+      "corequisites": [],
+      "department": "MIS",
+      "skills": [
+        "Information Systems",
+        "Database Management",
+        "System Analysis",
+        "IT Strategy"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "MIS 4330",
+      "title": "Business Intelligence and Data Warehousing",
+      "description": "Business intelligence systems, data warehousing concepts, and enterprise analytics.",
+      "credits": 3,
+      "prerequisites": [
+        "MIS 3300",
+        "BA 3351"
+      ],
+      "corequisites": [],
+      "department": "MIS",
+      "skills": [
+        "Business Intelligence",
+        "Data Warehousing",
+        "Enterprise Analytics",
+        "BI Tools"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "MATH 2417",
+      "title": "Calculus I",
+      "description": "Differential calculus including limits, derivatives, and applications to optimization problems.",
+      "credits": 4,
+      "prerequisites": [],
+      "corequisites": [],
+      "department": "MATH",
+      "skills": [
+        "Calculus",
+        "Derivatives",
+        "Optimization",
+        "Mathematical Analysis"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "MATH 2419",
+      "title": "Calculus II",
+      "description": "Integral calculus including integration techniques, series, and applications.",
+      "credits": 4,
+      "prerequisites": [
+        "MATH 2417"
+      ],
+      "corequisites": [],
+      "department": "MATH",
+      "skills": [
+        "Integration",
+        "Series",
+        "Mathematical Modeling",
+        "Applied Mathematics"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "COMM 3300",
+      "title": "Business Communication",
+      "description": "Professional communication skills including presentations, reports, and interpersonal communication.",
+      "credits": 3,
+      "prerequisites": [],
+      "corequisites": [],
+      "department": "COMM",
+      "skills": [
+        "Business Communication",
+        "Presentation Skills",
+        "Professional Writing",
+        "Interpersonal Skills"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "PSYC 2301",
+      "title": "Introduction to Psychology",
+      "description": "Fundamental principles of psychology including cognition, behavior, and human development.",
+      "credits": 3,
+      "prerequisites": [],
+      "corequisites": [],
+      "department": "PSYC",
+      "skills": [
+        "Psychology",
+        "Human Behavior",
+        "Cognitive Science",
+        "Research Methods"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "NSC 3361",
+      "title": "Introduction to Neuroscience",
+      "description": "Introduction to the nervous system including neural anatomy, physiology, and basic neuroscience principles.",
+      "credits": 3,
+      "prerequisites": [
+        "BIOL 2311"
+      ],
+      "corequisites": [],
+      "department": "NSC",
+      "skills": [
+        "Neuroscience",
+        "Neural Anatomy",
+        "Brain Function",
+        "Nervous System",
+        "Neurobiology"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "NSC 4352",
+      "title": "Cellular and Molecular Neuroscience",
+      "description": "Cellular and molecular mechanisms of neural function including ion channels, neurotransmitters, and signal transduction.",
+      "credits": 3,
+      "prerequisites": [
+        "NSC 3361"
+      ],
+      "corequisites": [],
+      "department": "NSC",
+      "skills": [
+        "Molecular Neuroscience",
+        "Cell Biology",
+        "Neural Signaling",
+        "Neurotransmitters"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "NSC 4353",
+      "title": "Systems Neuroscience",
+      "description": "Organization and function of neural systems including sensory, motor, and cognitive systems.",
+      "credits": 3,
+      "prerequisites": [
+        "NSC 3361"
+      ],
+      "corequisites": [],
+      "department": "NSC",
+      "skills": [
+        "Systems Neuroscience",
+        "Sensory Systems",
+        "Motor Control",
+        "Neural Circuits"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "NSC 4366",
+      "title": "Cognitive Neuroscience",
+      "description": "Neural basis of cognition including attention, memory, language, and decision-making.",
+      "credits": 3,
+      "prerequisites": [
+        "NSC 3361",
+        "PSYC 2301"
+      ],
+      "corequisites": [],
+      "department": "NSC",
+      "skills": [
+        "Cognitive Neuroscience",
+        "Memory",
+        "Attention",
+        "Language Processing",
+        "Decision Making"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "NSC 4390",
+      "title": "Behavioral Neuroscience",
+      "description": "Biological bases of behavior including emotion, motivation, learning, and neurological disorders.",
+      "credits": 3,
+      "prerequisites": [
+        "NSC 3361"
+      ],
+      "corequisites": [],
+      "department": "NSC",
+      "skills": [
+        "Behavioral Neuroscience",
+        "Emotion",
+        "Motivation",
+        "Learning",
+        "Neurological Disorders"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "BIOL 2311",
+      "title": "Introduction to Modern Biology I",
+      "description": "Fundamental principles of biology including cell structure, genetics, and molecular biology.",
+      "credits": 3,
+      "prerequisites": [],
+      "corequisites": [
+        "BIOL 2111"
+      ],
+      "department": "BIOL",
+      "skills": [
+        "Cell Biology",
+        "Genetics",
+        "Molecular Biology",
+        "Biological Systems"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "BIOL 2312",
+      "title": "Introduction to Modern Biology II",
+      "description": "Evolution, ecology, and organismal biology including physiology and behavior.",
+      "credits": 3,
+      "prerequisites": [
+        "BIOL 2311"
+      ],
+      "corequisites": [
+        "BIOL 2112"
+      ],
+      "department": "BIOL",
+      "skills": [
+        "Evolution",
+        "Ecology",
+        "Physiology",
+        "Animal Behavior"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "BIOL 3301",
+      "title": "Classical and Molecular Genetics",
+      "description": "Principles of heredity, gene structure and function, and genetic analysis.",
+      "credits": 3,
+      "prerequisites": [
+        "BIOL 2311"
+      ],
+      "corequisites": [],
+      "department": "BIOL",
+      "skills": [
+        "Genetics",
+        "Molecular Biology",
+        "Gene Expression",
+        "Genetic Analysis"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "BIOL 3361",
+      "title": "Biochemistry I",
+      "description": "Structure and function of biological molecules including proteins, carbohydrates, and lipids.",
+      "credits": 3,
+      "prerequisites": [
+        "BIOL 2311",
+        "CHEM 2323"
+      ],
+      "corequisites": [],
+      "department": "BIOL",
+      "skills": [
+        "Biochemistry",
+        "Protein Structure",
+        "Metabolism",
+        "Enzyme Function"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "PSYC 2317",
+      "title": "Statistics for Psychology",
+      "description": "Statistical methods for psychological research including descriptive and inferential statistics.",
+      "credits": 3,
+      "prerequisites": [
+        "PSYC 2301"
+      ],
+      "corequisites": [],
+      "department": "PSYC",
+      "skills": [
+        "Statistics",
+        "Research Methods",
+        "Data Analysis",
+        "Statistical Software"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "PSYC 3330",
+      "title": "Cognitive Psychology",
+      "description": "Mental processes including perception, attention, memory, language, and problem solving.",
+      "credits": 3,
+      "prerequisites": [
+        "PSYC 2301"
+      ],
+      "corequisites": [],
+      "department": "PSYC",
+      "skills": [
+        "Cognitive Psychology",
+        "Memory",
+        "Attention",
+        "Problem Solving",
+        "Perception"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "PSYC 3393",
+      "title": "Biopsychology",
+      "description": "Biological bases of behavior including brain structure, neural function, and psychopharmacology.",
+      "credits": 3,
+      "prerequisites": [
+        "PSYC 2301"
+      ],
+      "corequisites": [],
+      "department": "PSYC",
+      "skills": [
+        "Biopsychology",
+        "Brain Function",
+        "Neurotransmitters",
+        "Behavior",
+        "Psychopharmacology"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "CHEM 2323",
+      "title": "Introductory Organic Chemistry I",
+      "description": "Structure, properties, and reactions of organic compounds.",
+      "credits": 3,
+      "prerequisites": [
+        "CHEM 1312"
+      ],
+      "corequisites": [],
+      "department": "CHEM",
+      "skills": [
+        "Organic Chemistry",
+        "Chemical Reactions",
+        "Molecular Structure",
+        "Chemical Analysis"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "PHYS 2325",
+      "title": "Mechanics",
+      "description": "Classical mechanics including kinematics, dynamics, energy, and momentum.",
+      "credits": 3,
+      "prerequisites": [
+        "MATH 2417"
+      ],
+      "corequisites": [],
+      "department": "PHYS",
+      "skills": [
+        "Physics",
+        "Mechanics",
+        "Problem Solving",
+        "Mathematical Modeling"
+      ],
+      "level": "undergraduate"
+    },
+    {
+      "course_code": "PHYS 2326",
+      "title": "Electromagnetism and Waves",
+      "description": "Electricity, magnetism, and wave phenomena including optics.",
+      "credits": 3,
+      "prerequisites": [
+        "PHYS 2325"
+      ],
+      "corequisites": [],
+      "department": "PHYS",
+      "skills": [
+        "Electromagnetism",
+        "Wave Physics",
+        "Optics",
+        "Circuits"
+      ],
+      "level": "undergraduate"
+    }
+  ]
+}

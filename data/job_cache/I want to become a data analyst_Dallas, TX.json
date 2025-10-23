@@ -1,0 +1,80 @@
+{
+  "job_title": "I want to become a data analyst",
+  "location": "Dallas, TX",
+  "job_count": 10,
+  "skills": {
+    "Ai": 10,
+    "AI": 10,
+    "Sql": 6,
+    "SQL": 6,
+    "Git": 4,
+    "Machine Learning": 4,
+    "Python": 4,
+    "React": 2,
+    "Aws": 2,
+    "AWS": 2,
+    "Azure": 2,
+    "Data Science": 2,
+    "Gcp": 1,
+    "GCP": 1
+  },
+  "salaries": {
+    "count": 0,
+    "average_min": 0,
+    "average_max": 0,
+    "overall_average": 0
+  },
+  "trends": [
+    {
+      "skill": "Ai",
+      "count": 10,
+      "score": 10
+    },
+    {
+      "skill": "AI",
+      "count": 10,
+      "score": 10
+    },
+    {
+      "skill": "Sql",
+      "count": 6,
+      "score": 6
+    },
+    {
+      "skill": "SQL",
+      "count": 6,
+      "score": 6
+    },
+    {
+      "skill": "Git",
+      "count": 4,
+      "score": 4
+    },
+    {
+      "skill": "Machine Learning",
+      "count": 4,
+      "score": 4
+    },
+    {
+      "skill": "Python",
+      "count": 4,
+      "score": 4
+    },
+    {
+      "skill": "React",
+      "count": 2,
+      "score": 2
+    },
+    {
+      "skill": "Aws",
+      "count": 2,
+      "score": 2
+    },
+    {
+      "skill": "AWS",
+      "count": 2,
+      "score": 2
+    }
+  ],
+  "scraped_at": "2025-10-23T06:48:02.536195"
+}

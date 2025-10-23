@@ -1,0 +1,76 @@
+{
+  "metadata": {
+    "scraped_at": "2025-10-23T02:01:32.169156",
+    "total_jobs": 2,
+    "job_title": "DevOps Engineer",
+    "location": "Dallas, TX",
+    "source": "LinkedIn Selenium Scraper",
+    "version": "1.0"
+  },
+  "jobs": [
+    {
+      "title": "DevOps Engineer",
+      "company": "N/A",
+      "location": "N/A",
+      "salary": "Not specified",
+      "job_types": [],
+      "job_type": "Full-time",
+      "experience_level": "Mid-level",
+      "description": "About the job\nJob Description:\n\nSeeking a highly proficient developer to contribute to cloud-native application development using Python, Go, Kubernetes, Snowflake and Azure. The role demands deep integration with GitLab CI/CD pipelines and secure identity management via EntraID.\n\nKey Responsibilities:\nArchitect and implement scalable microservices in Python and Go.\nManage deployments and operations via Kubernetes CLI.\nDesign and maintain GitLab CI/CD pipelines.\nIntegrate with AWS services (e.g., S3, Lambda, SQS).\nImplement secure authentication and authorization using EntraID.\nOptimize system performance and reliability in production environments.\nCollaborate with DevOps and security teams to enforce best practices.\nRequired Skills:\nHigh-level proficiency in Python and Go.\nStrong experience with Kubernetes CLI and GitOps workflows.\nProven track record with GitLab CI/CD.\nHands-on experience with Azure or AWS cloud services.\nFamiliarity with Azure EntraID for identity and access management.\nSolid understanding of containerization, networking, and distributed systems.\nDemonstratable skills using Python for data manipulation with on of thee libraries like Pandas, Snowflake Snowpark, Polars, Spark Python etc.\nPreferred Qualifications:\nHands-on experience building and distributing Python libraries with Pip\nExperience with Helm and Jinja-based templating within YAML files.\nKnowledge of Kubernetes networking\nFamiliarity with observability stacks and logging (Prometheus, Grafana, Splunk).\nExperience working with Data Science teams\nPrevious experience integrating machine learning models into cloud services\nBasic understanding of data science and statical analysis\nExperience with Azure AI Foundry\n\nThe expected salary range for this position is between $80K - $105K annually. The actual salary may vary based upon several factors including, but not limited to, relevant skills/experience, time in role, base salary of internal peers, prior performance, business line, and geographic/office location.",
+      "requirements": [
+        "python and go",
+        "kubernetes cli and gitops workflows",
+        "azure or aws cloud services",
+        "helm and jinja-based templating within yaml files",
+        "azure ai foundry\n\nthe expected salary range for this position is between $80k - $105k annually",
+        "kubernetes networking\nfamiliarity with observability stacks and logging (prometheus",
+        "azure entraid for identity and access management",
+        "observability stacks and logging (prometheus"
+      ],
+      "url": "https://www.linkedin.com/jobs/view/4305265224/?eBP=CwEAAAGaD9yGyJzofZeJNZI8Ox1KPILZJg7mEZf5j6--NCpeGI9FnpGbzWisLHQyyErWvulopyn0WqyLRHhL10eM5dcSYx4ayJba2aMQQR5T1jtdxCIIyCAVt01c6doDxkWZgEyn59SVGDPzdRk0091f6Mrr2yBJXcxwEFUjAR2rUjjAK8lo8iohvzgceVO2jaPDIQzsJo1gxi9ZgtB-6GfY8Nlk7JPGcel43QdlA_4D2pAe7hMweoFzYK-zeyscV6aikIMOSUnoPc5t8IQj-wmEIRQzHTN_DEQTxTtZmDUQNHaMGyGrQ9p3uAFddPKHBZb7xdZNDNymDvTJ6IrjffD0EOjoEeb6lDNYmXrKc_F6f-XPZAE6C6n8JohC_QgZcPfZm2PHNe4gXmcbI3Tb6wZTuBzirkXcb2C0zz_vWqs2o0WdRL7f0dRX6eTbxXTLVPKyoN370JbyeXfhYXvBFvhZp8JJ9aKEZY1Vv46QL1S_4XEtep7weMJOJS8ujOf76N_3q9NFgTZwpXp-6r-m&refId=DAPAI%2FDbQAfCpUNpRE%2BDHQ%3D%3D&trackingId=2qSJljBoEe04HcJYXl0Vpg%3D%3D&trk=flagship3_search_srp_jobs",
+      "posted_date": "N/A",
+      "source": "LinkedIn",
+      "scraped_at": "2025-10-23T01:59:59.721857",
+      "skills": [
+        "Python",
+        "Aws",
+        "Azure",
+        "Kubernetes",
+        "Git",
+        "Machine Learning",
+        "Ai",
+        "Data Science",
+        "Pandas",
+        "Spark"
+      ]
+    },
+    {
+      "title": "DevOps Engineer",
+      "company": "N/A",
+      "location": "N/A",
+      "salary": "Not specified",
+      "job_types": [],
+      "job_type": "Full-time",
+      "experience_level": "Mid-level",
+      "description": "About the job\nJob Title : DevOps Engineer\nLocation : New York, United States\nJob Type : Full Time\n\nOur client is seeking an experienced DevOps Engineer to join their team, driving the deployment, automation, and operational excellence of cloud-based environments. This role offers the opportunity to work with cutting-edge cloud technologies, collaborate across global teams, and support high-performance production systems.\n\nRequired Qualifications\nBachelor’s degree in Computer Science, Engineering, or a related technical discipline.\nOver 5 years of hands-on experience managing cloud infrastructure, particularly using AWS and CDK.\nDeep understanding of DevOps principles, including collaboration, automation, monitoring, and continuous improvement.\nProven experience with a broad set of AWS services, covering networking, security, application hosting, infrastructure-as-code, and production support, ensuring high availability, scalability, and performance.\nPractical knowledge of Kubernetes, ArgoCD (K8s controller), and GitHub Actions for CI/CD pipelines.\nFlexibility to work outside standard business hours to coordinate with teams across multiple time zones.\nWillingness to travel approximately 10%, both domestically and internationally, as needed.\n\nPreferred Qualifications\nExperience deploying and managing data streaming platforms, such as Kafka or Solace.\nStrong technical knowledge of API specification frameworks like Protocol Buffers, GraphQL, or OpenAPI.\nHands-on experience in cloud security architecture and infrastructure.\nExcellent communication skills, capable of conveying complex technical and managerial information clearly and concisely.",
+      "requirements": [
+        "computer science",
+        "a broad set of aws services",
+        "kubernetes",
+        "api specification frameworks like protocol buffers"
+      ],
+      "url": "https://www.linkedin.com/jobs/view/4305265224/?eBP=CwEAAAGaD9yGyJzofZeJNZI8Ox1KPILZJg7mEZf5j6--NCpeGI9FnpGbzWisLHQyyErWvulopyn0WqyLRHhL10eM5dcSYx4ayJba2aMQQR5T1jtdxCIIyCAVt01c6doDxkWZgEyn59SVGDPzdRk0091f6Mrr2yBJXcxwEFUjAR2rUjjAK8lo8iohvzgceVO2jaPDIQzsJo1gxi9ZgtB-6GfY8Nlk7JPGcel43QdlA_4D2pAe7hMweoFzYK-zeyscV6aikIMOSUnoPc5t8IQj-wmEIRQzHTN_DEQTxTtZmDUQNHaMGyGrQ9p3uAFddPKHBZb7xdZNDNymDvTJ6IrjffD0EOjoEeb6lDNYmXrKc_F6f-XPZAE6C6n8JohC_QgZcPfZm2PHNe4gXmcbI3Tb6wZTuBzirkXcb2C0zz_vWqs2o0WdRL7f0dRX6eTbxXTLVPKyoN370JbyeXfhYXvBFvhZp8JJ9aKEZY1Vv46QL1S_4XEtep7weMJOJS8ujOf76N_3q9NFgTZwpXp-6r-m&refId=DAPAI%2FDbQAfCpUNpRE%2BDHQ%3D%3D&trackingId=2qSJljBoEe04HcJYXl0Vpg%3D%3D&trk=flagship3_search_srp_jobs",
+      "posted_date": "N/A",
+      "source": "LinkedIn",
+      "scraped_at": "2025-10-23T02:01:32.168626",
+      "skills": [
+        "Aws",
+        "Kubernetes",
+        "Git",
+        "Ai",
+        "Devops",
+        "Ci/Cd"
+      ]
+    }
+  ]
+}

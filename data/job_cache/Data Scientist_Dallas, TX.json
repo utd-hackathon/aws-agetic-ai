@@ -1,0 +1,78 @@
+{
+  "job_title": "Data Scientist",
+  "location": "Dallas, TX",
+  "job_count": 1,
+  "skills": {
+    "Python": 2,
+    "Git": 2,
+    "Machine Learning": 2,
+    "Data Science": 2,
+    "Spark": 2,
+    "Hadoop": 2,
+    "Aws": 1,
+    "Sql": 1,
+    "Ai": 1,
+    "AWS": 1,
+    "SQL": 1,
+    "AI": 1
+  },
+  "salaries": {
+    "count": 0,
+    "average_min": 0,
+    "average_max": 0,
+    "overall_average": 0
+  },
+  "trends": [
+    {
+      "skill": "Python",
+      "count": 2,
+      "score": 2
+    },
+    {
+      "skill": "Git",
+      "count": 2,
+      "score": 2
+    },
+    {
+      "skill": "Machine Learning",
+      "count": 2,
+      "score": 2
+    },
+    {
+      "skill": "Data Science",
+      "count": 2,
+      "score": 2
+    },
+    {
+      "skill": "Spark",
+      "count": 2,
+      "score": 2
+    },
+    {
+      "skill": "Hadoop",
+      "count": 2,
+      "score": 2
+    },
+    {
+      "skill": "Aws",
+      "count": 1,
+      "score": 1
+    },
+    {
+      "skill": "Sql",
+      "count": 1,
+      "score": 1
+    },
+    {
+      "skill": "Ai",
+      "count": 1,
+      "score": 1
+    },
+    {
+      "skill": "AWS",
+      "count": 1,
+      "score": 1
+    }
+  ],
+  "scraped_at": "2025-10-23T06:36:18.415222"
+}
