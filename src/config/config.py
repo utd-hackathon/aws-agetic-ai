@@ -13,8 +13,8 @@ class AWSConfig:
         self.aws_access_key_id = os.getenv("AWS_ACCESS_KEY_ID")
         self.aws_secret_access_key = os.getenv("AWS_SECRET_ACCESS_KEY")
         self.aws_region = os.getenv("AWS_REGION", "us-east-1")
-        self.bedrock_model_id = os.getenv("BEDROCK_MODEL_ID", "anthropic.claude-3-5-sonnet-20241022-v2:0")
-        self.bedrock_endpoint = os.getenv("BEDROCK_ENDPOINT", "bedrock-runtime.us-east-1.amazonaws.com")
+        self.bedrock_model_id = os.getenv("BEDROCK_MODEL_ID", "anthropic.claude-3-sonnet-20240229-v1:0")
+        self.bedrock_endpoint = os.getenv("BEDROCK_ENDPOINT") # Optional
 
         # Scraping configuration
         self.rapidapi_key = os.getenv("RAPIDAPI_KEY")
@@ -32,25 +32,35 @@ class AWSConfig:
         self._validate_config()
 
     def _validate_config(self):
-        """Validate that required AWS configuration is present"""
-        required_vars = ["AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY", "AWS_REGION"]
-        missing = [var for var in required_vars if not os.getenv(var)]
+        """Validate that required AWS configuration is present for local development."""
+        # In a deployed environment (like EC2 with an IAM role), keys may not be set.
+        # Boto3 will automatically use the instance role.
+        # We only enforce this for local development where a .env file is expected.
+        if self.aws_access_key_id and not self.aws_secret_access_key:
+            raise ValueError("AWS_SECRET_ACCESS_KEY must be set if AWS_ACCESS_KEY_ID is provided.")
+        if not self.aws_region:
+            raise ValueError("AWS_REGION must be set.")
 
-        if missing:
-            raise ValueError(f"Missing required AWS configuration: {', '.join(missing)}")
-        
         # Warn about optional but recommended configurations
         if not self.rapidapi_key:
             print("Warning: RAPIDAPI_KEY not set. Indeed scraping will be limited.")
 
     def get_bedrock_client(self):
-        """Get an AWS Bedrock runtime client"""
-        return boto3.client(
-            service_name="bedrock-runtime",
-            region_name=self.aws_region,
-            aws_access_key_id=self.aws_access_key_id,
-            aws_secret_access_key=self.aws_secret_access_key
-        )
+        """Get an AWS Bedrock runtime client."""
+        # If keys are provided, use them (local development).
+        # Otherwise, let boto3 use the environment's IAM role (deployed).
+        if self.aws_access_key_id and self.aws_secret_access_key:
+            return boto3.client(
+                service_name="bedrock-runtime",
+                region_name=self.aws_region,
+                aws_access_key_id=self.aws_access_key_id,
+                aws_secret_access_key=self.aws_secret_access_key,
+            )
+        else:
+            return boto3.client(
+                service_name="bedrock-runtime",
+                region_name=self.aws_region,
+            )
 
     def get_s3_client(self):
         """Get an AWS S3 client"""

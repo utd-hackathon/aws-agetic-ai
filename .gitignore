@@ -380,3 +380,10 @@ fabric.properties
 
 .idea
 .idea/
+
+cdk.out
+cdk.out/
+data/job_cache
+data/job_cache/
+aws
+aws/

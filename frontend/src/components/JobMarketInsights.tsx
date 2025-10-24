@@ -1,5 +1,4 @@
-import React from 'react'
-import { TrendingUp, DollarSign, Users, MapPin } from 'lucide-react'
+import { TrendingUp, DollarSign } from 'lucide-react'
 
 interface JobMarketInsightsProps {
   jobInsights: string[]

@@ -26,9 +26,9 @@ const ComprehensiveForm: React.FC<ComprehensiveFormProps> = ({ options, onSubmit
     internship_interest: true
   })
 
-  const [selectedSkills, setSelectedSkills] = useState<string[]>([])
-  const [selectedTargetSkills, setSelectedTargetSkills] = useState<string[]>([])
-  const [selectedIndustries, setSelectedIndustries] = useState<string[]>([])
+  // const [selectedSkills, setSelectedSkills] = useState<string[]>([])
+  // const [selectedTargetSkills, setSelectedTargetSkills] = useState<string[]>([])
+  // const [selectedIndustries, setSelectedIndustries] = useState<string[]>([])
 
   const handleInputChange = (field: string, value: any) => {
     setFormData(prev => ({ ...prev, [field]: value }))
