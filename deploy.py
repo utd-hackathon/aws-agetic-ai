@@ -39,62 +39,8 @@ class AgeticAiStack(cdk.Stack):
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
 
-        # --- Frontend Deployment (S3 + CloudFront) ---
-
-        # 1. Build the frontend application
-        print("Building frontend application...")
-        try:
-            subprocess.run(
-                "npm ci && npm run build",
-                shell=True,
-                check=True,
-                cwd=FRONTEND_PATH,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-            )
-            print("Frontend build successful.")
-        except subprocess.CalledProcessError as e:
-            print("ERROR: Frontend build failed.")
-            print(e.stderr.decode())
-            raise
-
-        # 2. Create a private S3 bucket for the frontend static site
-        frontend_bucket = s3.Bucket(
-            self,
-            f"{APP_NAME}-FrontendBucket",
-            bucket_name=f"{APP_NAME.lower()}-{ACCOUNT}-{REGION}",
-            block_public_access=s3.BlockPublicAccess.BLOCK_ALL, # Keep the bucket private
-            removal_policy=RemovalPolicy.DESTROY,
-            auto_delete_objects=True,
-        )
-
-        # 3. Create a CloudFront Origin Access Identity (OAI)
-        oai = cloudfront.OriginAccessIdentity(
-            self, f"{APP_NAME}-OAI"
-        )
-        frontend_bucket.grant_read(oai)
-
-        # 4. Create a CloudFront distribution pointing to the private S3 bucket via OAI
-        distribution = cloudfront.Distribution(
-            self,
-            f"{APP_NAME}-CloudFrontDistribution",
-            default_behavior=cloudfront.BehaviorOptions(
-                origin=origins.S3Origin(frontend_bucket, origin_access_identity=oai)
-            ),
-            default_root_object="index.html",
-        )
-
-        # 5. Deploy the built frontend to the S3 bucket
-        s3_deployment.BucketDeployment(
-            self,
-            f"{APP_NAME}-S3Deployment",
-            sources=[s3_deployment.Source.asset(os.path.join(FRONTEND_PATH, "dist"))],
-            destination_bucket=frontend_bucket,
-            distribution=distribution,
-            distribution_paths=["/*"],
-        )
-
         # --- Backend Deployment (EC2 Instance) ---
+        # Backend is created first so its IP is available for the CloudFront origin.
 
         # 1. Define the VPC
         vpc = ec2.Vpc(self, f"{APP_NAME}-Vpc", max_azs=2)
@@ -156,22 +102,87 @@ class AgeticAiStack(cdk.Stack):
         )
 
         # 7. Open ports for HTTP, HTTPS, and SSH
-        instance.connections.allow_from_any_ipv4(ec2.Port.tcp(80), "Allow HTTP In")
+        instance.connections.allow_from_any_ipv4(ec2.Port.tcp(80), "Allow HTTP In from anywhere")
         instance.connections.allow_from_any_ipv4(ec2.Port.tcp(443), "Allow HTTPS In")
         instance.connections.allow_from_any_ipv4(ec2.Port.tcp(22), "Allow SSH In for debugging")
+
+
+        # --- Frontend Deployment (S3 + CloudFront) ---
+
+        # 1. Build the frontend application
+        print("Building frontend application...")
+        try:
+            subprocess.run(
+                "npm ci && npm run build",
+                shell=True,
+                check=True,
+                cwd=FRONTEND_PATH,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            )
+            print("Frontend build successful.")
+        except subprocess.CalledProcessError as e:
+            print("ERROR: Frontend build failed.")
+            print(e.stderr.decode())
+            raise
+
+        # 2. Create a private S3 bucket for the frontend static site
+        frontend_bucket = s3.Bucket(
+            self,
+            f"{APP_NAME}-FrontendBucket",
+            bucket_name=f"{APP_NAME.lower()}-{ACCOUNT}-{REGION}",
+            block_public_access=s3.BlockPublicAccess.BLOCK_ALL, # Keep the bucket private
+            removal_policy=RemovalPolicy.DESTROY,
+            auto_delete_objects=True,
+        )
+
+        # 3. Create a CloudFront Origin Access Identity (OAI)
+        oai = cloudfront.OriginAccessIdentity(
+            self, f"{APP_NAME}-OAI"
+        )
+        frontend_bucket.grant_read(oai)
+
+        # 4. Create a CloudFront distribution with behaviors for frontend and backend
+        distribution = cloudfront.Distribution(
+            self,
+            f"{APP_NAME}-CloudFrontDistribution",
+            default_behavior=cloudfront.BehaviorOptions(
+                origin=origins.S3Origin(frontend_bucket, origin_access_identity=oai)
+            ),
+            default_root_object="index.html",
+            additional_behaviors={
+                "/api/*": cloudfront.BehaviorOptions(
+                    origin=origins.HttpOrigin(instance.instance_public_dns_name),
+                    viewer_protocol_policy=cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+                    allowed_methods=cloudfront.AllowedMethods.ALLOW_ALL,
+                    cache_policy=cloudfront.CachePolicy.CACHING_DISABLED,
+                    origin_request_policy=cloudfront.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER,
+                )
+            }
+        )
+
+        # 5. Deploy the built frontend to the S3 bucket
+        s3_deployment.BucketDeployment(
+            self,
+            f"{APP_NAME}-S3Deployment",
+            sources=[s3_deployment.Source.asset(os.path.join(FRONTEND_PATH, "dist"))],
+            destination_bucket=frontend_bucket,
+            distribution=distribution,
+            distribution_paths=["/*"],
+        )
 
         # --- Outputs ---
         cdk.CfnOutput(
             self,
             "CloudFrontURL",
             value=f"https://{distribution.distribution_domain_name}",
-            description="The URL of the frontend application.",
+            description="The URL for the frontend and API.",
         )
         cdk.CfnOutput(
             self,
             "EC2_Backend_URL",
             value=f"http://{eip.ref}",
-            description="The Public IP of the backend EC2 instance. Update .env.production with this.",
+            description="The Public IP of the backend EC2 instance for direct access/debugging.",
         )
 
 
