@@ -1,15 +1,50 @@
-"""Simple script to start the FastAPI server"""
+#!/usr/bin/env python3
+"""
+Start script for the UTD Career Guidance AI System
+"""
 
 import os
 import sys
 
+def check_dependencies():
+    """Check if all required dependencies are installed"""
+    try:
+        import fastapi
+        import uvicorn
+        import boto3
+        import selenium
+        import pandas
+        print("✅ All dependencies found")
+        return True
+    except ImportError as e:
+        print(f"❌ Missing dependency: {e}")
+        print("Please run: pip install -r requirements.txt")
+        return False
+
+def check_aws_credentials():
+    """Check if AWS credentials are configured"""
+    aws_key = os.getenv('AWS_ACCESS_KEY_ID')
+    aws_secret = os.getenv('AWS_SECRET_ACCESS_KEY')
+    
+    if not aws_key or not aws_secret:
+        print("⚠️  AWS credentials not found in environment variables")
+        print("   The system will work with limited functionality")
+        print("   For full functionality, set:")
+        print("   export AWS_ACCESS_KEY_ID=your_access_key")
+        print("   export AWS_SECRET_ACCESS_KEY=your_secret_key")
+        print("   export AWS_DEFAULT_REGION=us-east-1")
+        return False
+    
+    print("✅ AWS credentials found")
+    return True
+
 def main():
-    print("🚀 Starting UTD Career Guidance AI System")
-    print("=" * 60)
-    print("📍 Server will run at: http://127.0.0.1:8000")
-    print("📚 API Documentation: http://127.0.0.1:8000/docs")
-    print("=" * 60)
-    print()
+    """Start the server"""
+    print("🚀 UTD Career Guidance AI System")
+    print("=" * 50)
+    print("📍 Server: http://127.0.0.1:8000")
+    print("📚 API Docs: http://127.0.0.1:8000/docs")
+    print("=" * 50)
     
     # Check if we're in the right directory
     if not os.path.exists("src"):
@@ -18,20 +53,12 @@ def main():
         print("   python start_server.py")
         sys.exit(1)
     
-    # Check if requirements are installed
-    try:
-        import fastapi
-        import uvicorn
-        import boto3
-        import selenium
-    except ImportError as e:
-        print(f"❌ Error: Missing dependencies. Please install requirements:")
-        print(f"   pip install -r requirements.txt")
-        print(f"   Missing: {e.name}")
+    if not check_dependencies():
         sys.exit(1)
     
-    print("✅ All dependencies found")
-    print("🔄 Starting server with auto-reload enabled...")
+    check_aws_credentials()
+    
+    print("🔄 Starting server with auto-reload...")
     print()
     
     # Start uvicorn

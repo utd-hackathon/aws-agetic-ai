@@ -3,6 +3,7 @@ from typing import Dict, Any, List
 from src.agents.job_market_agent.job_market_agent import JobMarketAgent
 from src.agents.course_catalog_agent.course_catalog_agent import CourseCatalogAgent
 from src.agents.career_matching_agent.career_matching_agent import CareerMatchingAgent
+from src.agents.project_advisor_agent.project_advisor_agent import ProjectAdvisorAgent
 
 class AgentOrchestrator:
     """
@@ -14,6 +15,7 @@ class AgentOrchestrator:
         """Initialize the Agent Orchestrator with all specialized agents"""
         self.job_market_agent = JobMarketAgent()
         self.course_catalog_agent = CourseCatalogAgent()
+        self.project_advisor_agent = ProjectAdvisorAgent()
         
         # Initialize Career Matching Agent with other agents for coordination
         self.career_matching_agent = CareerMatchingAgent(
@@ -39,6 +41,8 @@ class AgentOrchestrator:
             return await self._process_job_market_request(request)
         elif request_type == "course_search":
             return self._process_course_search_request(request)
+        elif request_type == "project_recommendations":
+            return await self._process_project_request(request)
         else:
             return {"error": "Invalid request type"}
 
@@ -74,6 +78,12 @@ class AgentOrchestrator:
                     f"Average salary: ${career_matching_response['job_market_analysis']['salary_info'].get('overall_average', 0):,.0f}",
                     f"Top trending skills: {', '.join(career_matching_response['job_market_analysis']['trending_skills'][:3])}"
                 ],
+                
+                # Market insights with job trends and hot skills
+                "market_insights": career_matching_response.get("market_insights", {}),
+                
+                # Curriculum comparison: Job market vs course alignment
+                "curriculum_comparison": career_matching_response.get("curriculum_comparison", {}),
                 
                 # Skill gap analysis
                 "skill_analysis": {
@@ -133,6 +143,45 @@ class AgentOrchestrator:
             Dict[str, Any]: Course search results
         """
         return self.course_catalog_agent.process_request(request)
+    
+    async def _process_project_request(self, request: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Process a project recommendation request
+        
+        Args:
+            request (Dict[str, Any]): Project request with career_goal, skills, etc.
+            
+        Returns:
+            Dict[str, Any]: Project recommendations
+        """
+        try:
+            project_response = await self.project_advisor_agent.process_request(request)
+            
+            if project_response.get("success"):
+                return {
+                    "success": True,
+                    "career_goal": project_response.get("career_goal"),
+                    "skill_level": project_response.get("skill_level"),
+                    "projects": project_response.get("projects", []),
+                    "total_projects": project_response.get("total_projects", 0),
+                    "implementation_timeline": project_response.get("implementation_timeline"),
+                    "summary": {
+                        "purpose": "Build practical skills and create portfolio pieces",
+                        "approach": "Progress from foundational to advanced projects",
+                        "benefit": "Demonstrate competency to employers with tangible work"
+                    }
+                }
+            else:
+                return {
+                    "success": False,
+                    "error": "Failed to generate project recommendations"
+                }
+                
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Project recommendation failed: {str(e)}"
+            }
 
     def get_agent_capabilities(self) -> Dict[str, List[str]]:
         """
@@ -144,5 +193,6 @@ class AgentOrchestrator:
         return {
             "job_market_agent": self.job_market_agent.get_capabilities(),
             "course_catalog_agent": self.course_catalog_agent.get_capabilities(),
-            "career_matching_agent": self.career_matching_agent.get_capabilities()
+            "career_matching_agent": self.career_matching_agent.get_capabilities(),
+            "project_advisor_agent": self.project_advisor_agent.get_capabilities()
         }

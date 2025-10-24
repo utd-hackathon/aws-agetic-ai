@@ -1,237 +1,198 @@
-# 🎓 UTD Career Guidance AI System
+# UTD Career Guidance AI System
 
-An intelligent, autonomous AI career guidance system that helps UTD students plan their academic journey based on career goals, real-time job market data, and available coursework.
+An autonomous agentic AI system for personalized career guidance using AWS Bedrock, real-time job market data, and UTD course catalog integration.
 
-## 🚀 Quick Start
+## 🚀 Features
 
+- **AI-Powered Career Matching**: Personalized course recommendations based on career goals
+- **Real-Time Job Market Analysis**: LinkedIn job scraping with skill extraction and salary insights
+- **Project Recommendations**: LLM-generated project ideas for portfolio building
+- **Streamlined User Experience**: Quick Start (30s) or Comprehensive (5min) onboarding
+- **UTD Course Integration**: 2,470+ courses with intelligent matching
+- **Learning Path Planning**: Semester-by-semester progression with prerequisites
+
+## 🏗️ Architecture
+
+### Backend (FastAPI + Python)
+- **Career Matching Agent**: Orchestrates all agents and provides comprehensive guidance
+- **Job Market Intelligence Agent**: LinkedIn scraping with anti-bot measures
+- **Course Catalog Agent**: UTD course database with 2,470+ courses
+- **Project Advisor Agent**: LLM-powered project recommendations
+- **AWS Bedrock Integration**: Claude 3.5 Sonnet for intelligent analysis
+
+### Frontend (React + TypeScript + TailwindCSS)
+- **Modern UI**: Beautiful, responsive design with TailwindCSS
+- **Real-time Integration**: Seamless API communication
+- **Progressive Enhancement**: Quick Start → Comprehensive profiles
+- **Interactive Components**: Course cards, job insights, project recommendations
+
+## 🛠️ Installation
+
+### Prerequisites
+- Python 3.11+
+- Node.js 18+
+- AWS Account with Bedrock access
+- Chrome/Chromium browser (for LinkedIn scraping)
+
+### Backend Setup
 ```bash
-# 1. Install dependencies
-cd aws-agetic-ai
+# Install Python dependencies
 pip install -r requirements.txt
 
-# 2. Start the server
+# Set up environment variables
+export AWS_ACCESS_KEY_ID=your_access_key
+export AWS_SECRET_ACCESS_KEY=your_secret_key
+export AWS_DEFAULT_REGION=us-east-1
+
+# Start the server
 python start_server.py
-
-# 3. Test the system
-python test_system.py
 ```
 
-**Server**: http://127.0.0.1:8000  
-**API Docs**: http://127.0.0.1:8000/docs
-
-## ✨ Features
-
-### Core Capabilities
-
-✅ **Career-Specific Course Recommendations**
-- Analyzes career goals and recommends relevant UTD courses
-- Provides personalized explanations for each recommendation
-- Supports 12+ career paths (Financial Analyst, Data Scientist, Neuroscientist, etc.)
-- Generates semester-by-semester learning paths
-
-✅ **Real-Time Job Market Intelligence**
-- LinkedIn job data scraping (Selenium-based)
-- Skills analysis and trending skills identification
-- Salary insights and market trends
-- Location-based job availability
-
-✅ **Comprehensive Course Catalog**
-- 70 UTD courses across 18 departments
-- Intelligent course search and filtering
-- Prerequisite tracking
-- Skills-based matching
-
-✅ **Intelligent Fallback Systems**
-- Works without AWS Bedrock credentials
-- Works without LinkedIn credentials
-- Optimized for speed and reliability
-
-## 📊 System Architecture
-
-```
-FastAPI Application (API Layer)
-        ↓
-Agent Orchestrator (Coordinator)
-        ↓
-   ┌────┴────┬───────┐
-   ↓         ↓       ↓
-Career    Job     Course
-Matching  Market  Catalog
-Agent     Agent   Agent
-   ↓
-LinkedIn Scraper + Mock Data
+### Frontend Setup
+```bash
+cd frontend
+npm install
+npm run dev
 ```
 
-## 📁 Project Structure
+## 🎯 Usage
 
-```
-aws-agetic-ai/
-├── src/
-│   ├── agents/              # AI Agents
-│   │   ├── career_matching_agent/
-│   │   ├── job_market_agent/
-│   │   ├── course_catalog_agent/
-│   │   └── orchestrator.py
-│   ├── api/app.py          # FastAPI application
-│   ├── auth/               # LinkedIn authentication
-│   ├── config/             # Configuration
-│   ├── core/
-│   │   ├── aws/            # AWS Bedrock integration
-│   │   └── llm/            # LLM recommendation service
-│   └── scrapers/           # Web scrapers
-├── data/
-│   ├── utd_courses.json    # 70 UTD courses
-│   └── job_cache/          # Cached job data
-├── start_server.py         # Server startup
-├── test_system.py          # System test
-├── SETUP.md               # Detailed setup
-└── PROJECT_SUMMARY.md     # Technical summary
-```
+### Quick Start (30 seconds)
+1. Visit http://localhost:3000
+2. Enter your career goal (e.g., "Data Scientist")
+3. Optionally add current skills
+4. Get instant personalized guidance
 
-## 🔌 API Endpoints
+### Comprehensive Profile (5 minutes)
+1. Choose "Comprehensive Profile"
+2. Fill in detailed information:
+   - Career goals and target skills
+   - Academic year and experience level
+   - Industry interests and learning style
+   - Company preferences and certifications
+3. Get highly personalized recommendations
 
-### Primary Endpoint
+## 📊 What You Get
 
-**POST /api/career-guidance**
-```json
-{
-  "query": "I want to become a Data Scientist",
-  "location": "Dallas, TX"
-}
-```
+### Course Recommendations
+- 6 personalized courses based on career goals
+- Skill mapping and explanations
+- Prerequisites and credit hours
+- Priority-based recommendations
 
-**Response includes:**
-- Career goal analysis
-- Job market insights (skills, salaries, trending skills)
-- Personalized course recommendations with explanations
-- Semester-by-semester learning path
+### Project Ideas
+- 3 portfolio-worthy projects
+- Difficulty levels and timelines
+- Skills practiced and portfolio impact
+- Real-world applicability
+
+### Job Market Insights
+- Real LinkedIn job data
+- Salary information and trends
+- Hot skills and market analysis
+- Location-specific insights
+
+### Learning Paths
+- Semester-by-semester progression
+- Prerequisites and credit hours
+- Milestone tracking
 - Estimated completion time
 
-### Additional Endpoints
+## 🔧 API Endpoints
 
-- **POST /job-market** - Job market analysis
-- **POST /course-search** - Search UTD courses
-- **GET /health** - System health check
-- **GET /docs** - Interactive API documentation
+### Core Endpoints
+- `POST /api/onboarding/quick-start` - Quick career guidance
+- `POST /api/onboarding/comprehensive` - Detailed career guidance
+- `POST /api/project-recommendations` - Project recommendations
+- `GET /api/onboarding/options` - Available options for forms
 
-## 💡 Example Usage
+### Analysis Endpoints
+- `POST /job-market` - Job market analysis
+- `POST /course-search` - Course search
+- `GET /api/agents/status` - System status
 
-### Career Guidance Request
+### Authentication
+- `POST /auth/linkedin` - LinkedIn authentication
+- `GET /auth/status` - Authentication status
+- `POST /auth/logout` - Clear session
 
-```python
-import requests
+## 🧠 AI Agents
 
-response = requests.post(
-    "http://127.0.0.1:8000/api/career-guidance",
-    json={
-        "query": "I want to become a Financial Analyst",
-        "location": "Dallas, TX"
-    }
-)
+### Career Matching Agent (Orchestrator)
+- Coordinates all other agents
+- Analyzes job requirements vs. coursework
+- Generates personalized recommendations
+- Creates learning paths and curriculum comparisons
 
-data = response.json()
-print(f"Recommended Courses: {len(data['course_recommendations'])}")
-print(f"Job Market Insights: {data['job_market_analysis']}")
-print(f"Learning Path: {data['learning_path']}")
-```
+### Job Market Intelligence Agent
+- LinkedIn job scraping with Selenium
+- Skill extraction and frequency analysis
+- Salary data processing
+- Market trend identification
 
-### Example Output
+### Course Catalog Agent
+- UTD course database management
+- Course search and filtering
+- Prerequisites and credit hour tracking
+- Department and keyword matching
 
-For "Financial Analyst":
-1. **STAT 4351**: Probability and Statistics (High Priority)
-2. **FIN 3320**: Business Finance (High Priority)
-3. **ACCT 2301**: Introduction to Financial Accounting (High Priority)
-4. **ECON 2301**: Principles of Macroeconomics (High Priority)
+### Project Advisor Agent
+- LLM-powered project generation
+- Difficulty and timeline estimation
+- Skills mapping and portfolio impact
+- Real-world applicability assessment
 
-**Job Market**: 2 jobs, $95K avg salary, trending skills: Financial Analysis, Excel, Financial Modeling
+## 🔒 Security & Performance
 
-## 🎯 Supported Career Paths
+- **LinkedIn Authentication**: Secure session management
+- **Anti-bot Measures**: Stealth scraping with delays and user agents
+- **Caching**: Intelligent caching for performance
+- **Error Handling**: Robust fallback systems
+- **Rate Limiting**: Respectful scraping practices
 
-- Financial Analyst, Investment Analyst
-- Data Scientist, Data Engineer
-- Software Engineer, DevOps Engineer
-- Neuroscientist, Behavioral Neuroscientist
-- Marketing Analyst, Business Analyst
-- Operations Manager, Management Consultant
-- And more...
+## 📈 Performance Metrics
 
-## 📚 Course Database
+- **Response Time**: < 2 seconds for quick start
+- **Course Database**: 2,470+ UTD courses
+- **Job Market Data**: Real-time LinkedIn scraping
+- **AI Integration**: AWS Bedrock Claude 3.5 Sonnet
+- **Frontend**: React with TypeScript and TailwindCSS
 
-**Total**: 70 courses  
-**Departments**: 18 (CS, FIN, ACCT, ECON, BA, NSC, BIOL, PSYC, CHEM, PHYS, MATH, STAT, etc.)
+## 🚀 Deployment
 
-### Course Categories:
-- **Computer Science**: 21 courses
-- **Business & Finance**: 23 courses (FIN, ACCT, ECON, BA, MGMT, MKTG, MIS, OPRE)
-- **Neuroscience & Psychology**: 9 courses (NSC, PSYC)
-- **Biology & Chemistry**: 5 courses
-- **Mathematics & Statistics**: 8 courses
-- **Engineering & Systems**: 4 courses
-
-## ⚙️ Configuration (Optional)
-
-Create a `.env` file for optional features:
-
-```env
-# AWS Bedrock (Optional - uses fallback if not provided)
-AWS_ACCESS_KEY_ID=your_key
-AWS_SECRET_ACCESS_KEY=your_secret
-AWS_REGION=us-east-1
-
-# LinkedIn (Optional - uses mock data if not provided)
-LINKEDIN_EMAIL=your_email
-LINKEDIN_PASSWORD=your_password
-```
-
-**Note**: System works fully without these credentials using intelligent fallbacks.
-
-## 🧪 Testing
-
+### Local Development
 ```bash
-# Quick system test
-python test_system.py
+# Backend
+python start_server.py
 
-# Manual API testing
-curl http://127.0.0.1:8000/health
-curl -X POST http://127.0.0.1:8000/api/career-guidance \
-  -H "Content-Type: application/json" \
-  -d '{"query": "I want to become a Data Scientist", "location": "Dallas, TX"}'
+# Frontend
+cd frontend && npm run dev
 ```
 
-## 📖 Documentation
-
-- **SETUP.md** - Detailed setup instructions
-- **PROJECT_SUMMARY.md** - Technical architecture and implementation details
-- **API Docs** - http://127.0.0.1:8000/docs (when server is running)
-
-## 🔧 Technology Stack
-
-- **Backend**: FastAPI, Python 3.11+
-- **Web Scraping**: Selenium WebDriver
-- **AI/LLM**: AWS Bedrock Claude Haiku (with intelligent fallback)
-- **Data Storage**: JSON files (local development)
-- **Authentication**: LinkedIn OAuth flow
-
-## 📈 Performance
-
-- **Career Recommendations**: < 1 second (with caching)
-- **Job Market Analysis**: 2-5 seconds
-- **Course Search**: < 100ms
-- **Total Response Time**: ~1-3 seconds typical
-
-## 🎓 Academic Context
-
-This system was developed as part of the UTD Career Guidance AI Challenge, focusing on:
-- Autonomous agentic AI architecture
-- AWS Bedrock integration
-- Real-time job market analysis
-- Personalized academic path planning
-- Student-centric career guidance
+### Production
+- Backend: Deploy to AWS EC2/ECS with proper environment variables
+- Frontend: Deploy to Vercel or AWS Amplify
+- Database: Consider DynamoDB for production data storage
 
 ## 📝 License
 
-See LICENSE file for details.
+MIT License - see LICENSE file for details.
 
 ## 🤝 Contributing
 
-This is an academic project. For questions or feedback, please refer to the project documentation.
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests if applicable
+5. Submit a pull request
+
+## 📞 Support
+
+For issues or questions:
+1. Check the API documentation at http://127.0.0.1:8000/docs
+2. Review the system status at http://127.0.0.1:8000/api/agents/status
+3. Check logs for detailed error information
+
+---
+
+**Built with ❤️ for UTD students by the Career Guidance AI Team**
