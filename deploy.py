@@ -12,7 +12,6 @@ from aws_cdk import (
     aws_ecr_assets as ecr_assets,
     aws_ec2 as ec2,
     aws_iam as iam,
-    aws_logs as logs,
     RemovalPolicy,
 )
 from constructs import Construct
@@ -59,29 +58,33 @@ class AgeticAiStack(cdk.Stack):
             print(e.stderr.decode())
             raise
 
-        # 2. Create S3 bucket for the frontend static site
+        # 2. Create a private S3 bucket for the frontend static site
         frontend_bucket = s3.Bucket(
             self,
             f"{APP_NAME}-FrontendBucket",
             bucket_name=f"{APP_NAME.lower()}-{ACCOUNT}-{REGION}",
-            website_index_document="index.html",
-            public_read_access=True,
-            block_public_access=s3.BlockPublicAccess(block_public_policy=False),
+            block_public_access=s3.BlockPublicAccess.BLOCK_ALL, # Keep the bucket private
             removal_policy=RemovalPolicy.DESTROY,
             auto_delete_objects=True,
         )
 
-        # 3. Create a CloudFront distribution using the S3 bucket's website URL
+        # 3. Create a CloudFront Origin Access Identity (OAI)
+        oai = cloudfront.OriginAccessIdentity(
+            self, f"{APP_NAME}-OAI"
+        )
+        frontend_bucket.grant_read(oai)
+
+        # 4. Create a CloudFront distribution pointing to the private S3 bucket via OAI
         distribution = cloudfront.Distribution(
             self,
             f"{APP_NAME}-CloudFrontDistribution",
             default_behavior=cloudfront.BehaviorOptions(
-                origin=origins.HttpOrigin(frontend_bucket.bucket_website_domain_name)
+                origin=origins.S3Origin(frontend_bucket, origin_access_identity=oai)
             ),
             default_root_object="index.html",
         )
 
-        # 4. Deploy the built frontend to the S3 bucket
+        # 5. Deploy the built frontend to the S3 bucket
         s3_deployment.BucketDeployment(
             self,
             f"{APP_NAME}-S3Deployment",
@@ -93,41 +96,20 @@ class AgeticAiStack(cdk.Stack):
 
         # --- Backend Deployment (EC2 Instance) ---
 
-        # 1. Create CloudWatch Log Groups
-        container_log_group = logs.LogGroup(
-            self,
-            f"{APP_NAME}-BackendLogGroup",
-            log_group_name=f"/aws/ec2/{APP_NAME}-backend",
-            removal_policy=RemovalPolicy.DESTROY,
-        )
-        startup_log_group = logs.LogGroup(
-            self,
-            f"{APP_NAME}-StartupLogGroup",
-            log_group_name=f"/aws/ec2/{APP_NAME}-startup-logs",
-            removal_policy=RemovalPolicy.DESTROY,
-        )
-
-        # 2. Define the VPC
+        # 1. Define the VPC
         vpc = ec2.Vpc(self, f"{APP_NAME}-Vpc", max_azs=2)
 
-        # 3. Build and push the Docker image to ECR
+        # 2. Build and push the Docker image to ECR
         backend_image = ecr_assets.DockerImageAsset(
             self, f"{APP_NAME}-BackendImage", directory=DOCKERFILE_PATH
         )
 
-        # 4. Create an IAM role for the EC2 instance
+        # 3. Create an IAM role for the EC2 instance
         ec2_role = iam.Role(
             self, f"{APP_NAME}-EC2Role",
-            assumed_by=iam.ServicePrincipal("ec2.amazonaws.com"),
-            managed_policies=[
-                iam.ManagedPolicy.from_aws_managed_policy_name("AmazonSSMManagedInstanceCore")
-            ]
+            assumed_by=iam.ServicePrincipal("ec2.amazonaws.com")
         )
         backend_image.repository.grant_pull(ec2_role)
-        container_log_group.grant_write(ec2_role)
-        startup_log_group.grant_write(ec2_role)
-
-        # Add policy to allow invoking Bedrock models
         ec2_role.add_to_policy(
             iam.PolicyStatement(
                 actions=["bedrock:InvokeModel"],
@@ -135,7 +117,7 @@ class AgeticAiStack(cdk.Stack):
             )
         )
 
-        # 5. Create the EC2 instance
+        # 4. Create the EC2 instance with an SSH key pair
         instance = ec2.Instance(
             self,
             f"{APP_NAME}-Instance",
@@ -144,61 +126,39 @@ class AgeticAiStack(cdk.Stack):
             machine_image=ec2.MachineImage.latest_amazon_linux2023(),
             role=ec2_role,
             vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PUBLIC),
+            key_name="aws-agetic-ai-key", # CRITICAL: Assumes you created this key pair
         )
 
-        # 6. Create CloudWatch Agent config file content
-        cw_agent_config = {
-            "agent": {"run_as_user": "root"},
-            "logs": {
-                "logs_collected": {
-                    "files": {
-                        "collect_list": [
-                            {
-                                "file_path": "/var/log/user-data.log",
-                                "log_group_name": startup_log_group.log_group_name,
-                                "log_stream_name": "{instance_id}",
-                            }
-                        ]
-                    }
-                }
-            },
-        }
+        # 5. Create an Elastic IP and associate it with the instance
+        eip = ec2.CfnEIP(self, f"{APP_NAME}-EIP")
+        ec2.CfnEIPAssociation(
+            self,
+            f"{APP_NAME}-EIPAssociation",
+            eip=eip.ref,
+            instance_id=instance.instance_id,
+        )
 
-        import json
-        cw_agent_config_json = json.dumps(cw_agent_config)
-
-        # 7. Add User Data to install everything and send logs
+        # 6. Add a simplified and corrected User Data script
         instance.user_data.add_commands(
-            "exec > /var/log/user-data.log 2>&1", # Redirect all output
-            "set -x", # Echo all commands
-
-            "# Install CW Agent",
-            "dnf install -y amazon-cloudwatch-agent",
-            f"echo '{cw_agent_config_json}' > /opt/aws/amazon-cloudwatch-agent/bin/config.json",
-            "amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/opt/aws/amazon-cloudwatch-agent/bin/config.json -s",
-
-            "# Install Docker",
+            "exec > /home/ec2-user/user-data.log 2>&1",  # Log to a user-writable directory
+            "set -x",  # Echo all commands to the log file
+            "dnf update -y",
             "dnf install -y docker",
-            "service docker start",
+            "systemctl start docker",  # Correct command for Amazon Linux 2023
+            "systemctl enable docker", # Ensure Docker starts on reboot
             "usermod -a -G docker ec2-user",
-
-            "# Login to ECR",
             f"aws ecr get-login-password --region {self.region} | docker login --username AWS --password-stdin {self.account}.dkr.ecr.{self.region}.amazonaws.com",
-
-            "# Run Container",
             f"docker pull {backend_image.image_uri}",
             f"docker run -d -p 80:8080 "
-            f"--log-driver=awslogs "
-            f"--log-opt awslogs-group={container_log_group.log_group_name} "
-            f"--log-opt awslogs-region={self.region} "
-            f"--log-opt awslogs-stream-prefix=container "
             f"-e AWS_REGION={self.region} "
             f"-e BEDROCK_MODEL_ID='anthropic.claude-3-sonnet-20240229-v1:0' "
             f"{backend_image.image_uri}",
         )
 
-        # 8. Open port 80 to allow inbound HTTP traffic
+        # 7. Open ports for HTTP, HTTPS, and SSH
         instance.connections.allow_from_any_ipv4(ec2.Port.tcp(80), "Allow HTTP In")
+        instance.connections.allow_from_any_ipv4(ec2.Port.tcp(443), "Allow HTTPS In")
+        instance.connections.allow_from_any_ipv4(ec2.Port.tcp(22), "Allow SSH In for debugging")
 
         # --- Outputs ---
         cdk.CfnOutput(
@@ -210,20 +170,8 @@ class AgeticAiStack(cdk.Stack):
         cdk.CfnOutput(
             self,
             "EC2_Backend_URL",
-            value=f"http://{instance.instance_public_ip}",
+            value=f"http://{eip.ref}",
             description="The Public IP of the backend EC2 instance. Update .env.production with this.",
-        )
-        cdk.CfnOutput(
-            self,
-            "BackendContainerLogGroupName",
-            value=container_log_group.log_group_name,
-            description="CloudWatch Log Group name for the backend container.",
-        )
-        cdk.CfnOutput(
-            self,
-            "BackendStartupLogGroupName",
-            value=startup_log_group.log_group_name,
-            description="CloudWatch Log Group name for the EC2 startup script.",
         )
 
 

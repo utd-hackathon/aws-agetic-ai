@@ -387,3 +387,4 @@ data/job_cache
 data/job_cache/
 aws
 aws/
+*.pem
