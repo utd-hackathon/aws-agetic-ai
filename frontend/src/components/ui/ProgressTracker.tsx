@@ -1,5 +1,5 @@
 import React from 'react'
-import { Check, Clock, ArrowRight } from 'lucide-react'
+import { Check, Clock } from 'lucide-react'
 
 interface ProgressStep {
   id: string
@@ -53,20 +53,20 @@ const ProgressTracker: React.FC<ProgressTrackerProps> = ({
       {/* Desktop Step Indicator */}
       <div className="hidden md:block">
         <nav aria-label="Progress">
-          <ol className="flex items-center">
+          <ol className="flex items-center justify-between">
             {steps.map((step, stepIdx) => (
-              <li key={step.id} className={`relative ${stepIdx !== steps.length - 1 ? 'pr-8 sm:pr-20' : ''}`}>
+              <li key={step.id} className="relative flex-1 flex flex-col items-center">
                 {/* Connector Line */}
                 {stepIdx !== steps.length - 1 && (
-                  <div className="absolute inset-0 flex items-center" aria-hidden="true">
-                    <div className={`h-0.5 w-full ${
+                  <div className="absolute top-4 left-1/2 w-full h-0.5" aria-hidden="true">
+                    <div className={`h-full ${
                       step.status === 'completed' ? 'bg-primary-600' : 'bg-secondary-200'
                     }`} />
                   </div>
                 )}
 
                 {/* Step Circle */}
-                <div className="relative flex items-center justify-center">
+                <div className="relative z-10 flex items-center justify-center mb-2">
                   {step.status === 'completed' ? (
                     <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary-600 hover:bg-primary-700 transition-colors">
                       <Check className="h-5 w-5 text-white" aria-hidden="true" />
@@ -80,29 +80,27 @@ const ProgressTracker: React.FC<ProgressTrackerProps> = ({
                       <div className="h-2.5 w-2.5 rounded-full bg-transparent group-hover:bg-secondary-300 transition-colors" />
                     </div>
                   )}
+                </div>
 
-                  {/* Step Content */}
-                  <div className="absolute top-10 left-1/2 transform -translate-x-1/2 w-max max-w-xs">
-                    <div className={`text-center ${
-                      step.status === 'current' ? 'text-primary-600' : 
-                      step.status === 'completed' ? 'text-secondary-700' : 'text-secondary-500'
-                    }`}>
-                      <div className={`text-sm font-medium ${
-                        step.status === 'current' ? 'font-semibold' : ''
-                      }`}>
-                        {step.title}
-                      </div>
-                      <div className="text-xs mt-1">
-                        {step.description}
-                      </div>
-                      {step.estimatedTime && step.status === 'current' && (
-                        <div className="flex items-center justify-center mt-1 text-xs text-secondary-500">
-                          <Clock className="h-3 w-3 mr-1" />
-                          {step.estimatedTime}
-                        </div>
-                      )}
-                    </div>
+                {/* Step Content */}
+                <div className="text-center px-2">
+                  <div className={`text-sm font-medium ${
+                    step.status === 'current' ? 'text-primary-600 font-semibold' : 
+                    step.status === 'completed' ? 'text-secondary-700' : 'text-secondary-500'
+                  }`}>
+                    {step.title}
                   </div>
+                  <div className={`text-xs mt-1 ${
+                    step.status === 'current' ? 'text-secondary-600' : 'text-secondary-500'
+                  }`}>
+                    {step.description}
+                  </div>
+                  {step.estimatedTime && step.status === 'current' && (
+                    <div className="flex items-center justify-center mt-1 text-xs text-secondary-500">
+                      <Clock className="h-3 w-3 mr-1" />
+                      {step.estimatedTime}
+                    </div>
+                  )}
                 </div>
               </li>
             ))}

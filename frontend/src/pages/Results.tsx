@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import { useCareerGuidance } from '../context/CareerGuidanceContext'
 import { useNavigate } from 'react-router-dom'
 import CourseCard from '../components/ui/CourseCard'
-import JobInsightCard from '../components/ui/JobInsightCard'
 import ProjectCard from '../components/ui/ProjectCard'
 import { 
   ArrowLeft, 
@@ -15,10 +14,7 @@ import {
   Target,
   Calendar,
   CheckCircle,
-  Star,
-  MapPin,
-  Clock,
-  Users
+  Star
 } from 'lucide-react'
 
 const Results: React.FC = () => {
@@ -48,18 +44,42 @@ const Results: React.FC = () => {
     )
   }
 
+  // Helper function to get unique course identifier
+  const getCourseId = (course: any): string => {
+    return course.course_code || course.id || course.course_name || JSON.stringify(course)
+  }
+
+  // Helper function to check if course is in plan
+  const isCourseInPlan = (course: any): boolean => {
+    const courseId = getCourseId(course)
+    return selectedCourses.some(c => getCourseId(c) === courseId)
+  }
+
   const showToast = (message: string, type: 'success' | 'info' | 'error' = 'success') => {
     setToast({ message, type })
     setTimeout(() => setToast(null), 3000)
   }
 
   const handleCourseSelect = (course: any) => {
-    const isAdding = !selectedCourses.find(c => c.course_code === course.course_code)
-    setSelectedCourses(prev => 
-      prev.find(c => c.course_code === course.course_code)
-        ? prev.filter(c => c.course_code !== course.course_code)
-        : [...prev, course]
-    )
+    console.log('Course clicked:', course)
+    const courseId = getCourseId(course)
+    console.log('Course ID:', courseId)
+    const isAdding = !selectedCourses.find(c => getCourseId(c) === courseId)
+    console.log('Is adding:', isAdding)
+    console.log('Selected courses before:', selectedCourses.map(c => getCourseId(c)))
+    
+    setSelectedCourses(prev => {
+      const found = prev.find(c => getCourseId(c) === courseId)
+      
+      if (found) {
+        // Remove from selection
+        return prev.filter(c => getCourseId(c) !== courseId)
+      } else {
+        // Add to selection
+        return [...prev, course]
+      }
+    })
+    
     if (isAdding) {
       showToast(`✓ ${course.title || course.course_name} added to your plan!`)
     }
@@ -270,8 +290,8 @@ Generated on: ${new Date().toLocaleDateString()}
               </h4>
               <CourseCard
                 course={guidanceResult.course_recommendations[0]}
-                onSelect={handleCourseSelect}
                 onAddToPlan={handleCourseSelect}
+                isInPlan={guidanceResult.course_recommendations[0] ? isCourseInPlan(guidanceResult.course_recommendations[0]) : false}
                 showActions={false}
               />
             </div>
@@ -287,6 +307,7 @@ Generated on: ${new Date().toLocaleDateString()}
               <ProjectCard
                 project={guidanceResult.project_recommendations[0]}
                 onAddToRoadmap={handleProjectSelect}
+                isInRoadmap={selectedProjects.some(p => p.title === guidanceResult.project_recommendations?.[0]?.title)}
               />
             </div>
           )}
@@ -310,9 +331,9 @@ Generated on: ${new Date().toLocaleDateString()}
             <CourseCard
               key={index}
               course={course}
-              isSelected={selectedCourses.some(c => c.course_code === course.course_code)}
-              onSelect={handleCourseSelect}
+              isSelected={isCourseInPlan(course)}
               onAddToPlan={handleCourseSelect}
+              isInPlan={isCourseInPlan(course)}
             />
           ))}
         </div>
@@ -343,13 +364,13 @@ Generated on: ${new Date().toLocaleDateString()}
           <div className="grid md:grid-cols-3 gap-4">
             <div className="text-center">
               <div className="text-2xl font-bold text-blue-600">
-                {guidanceResult.market_insights.total_opportunities || guidanceResult.job_market_analysis?.total_jobs || 'N/A'}
+                {guidanceResult.market_insights.total_opportunities || 'N/A'}
               </div>
               <div className="text-sm text-blue-700">Available Jobs</div>
             </div>
             <div className="text-center">
               <div className="text-2xl font-bold text-success-600">
-                ${guidanceResult.market_insights.salary_insights?.average?.toLocaleString() || guidanceResult.job_market_analysis?.salary_info?.overall_average?.toLocaleString() || 'N/A'}
+                ${guidanceResult.market_insights.salary_insights?.average?.toLocaleString() || 'N/A'}
               </div>
               <div className="text-sm text-success-700">Average Salary</div>
             </div>
@@ -436,6 +457,7 @@ Generated on: ${new Date().toLocaleDateString()}
               key={index}
               project={project}
               onAddToRoadmap={handleProjectSelect}
+              isInRoadmap={selectedProjects.some(p => p.title === project.title)}
             />
           ))}
         </div>

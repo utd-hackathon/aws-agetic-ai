@@ -29,16 +29,17 @@ interface Project {
 interface ProjectCardProps {
   project: Project
   onAddToRoadmap?: (project: Project) => void
+  isInRoadmap?: boolean
   className?: string
 }
 
 const ProjectCard: React.FC<ProjectCardProps> = ({
   project,
   onAddToRoadmap,
+  isInRoadmap = false,
   className = ''
 }) => {
   const [isExpanded, setIsExpanded] = useState(false)
-  const [isAdded, setIsAdded] = useState(false)
 
   const difficultyConfig = {
     beginner: {
@@ -67,11 +68,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   const config = difficultyConfig[project.difficulty]
 
   const handleAddToRoadmap = () => {
-    setIsAdded(true)
     onAddToRoadmap?.(project)
-    
-    // Reset after animation
-    setTimeout(() => setIsAdded(false), 2000)
   }
 
   const renderStars = (count: number) => {
@@ -252,22 +249,22 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
 
         <button
           onClick={handleAddToRoadmap}
-          disabled={isAdded}
-          className={`btn-sm transition-all duration-200 ${
-            isAdded 
-              ? 'btn-success' 
+          disabled={isInRoadmap}
+          className={`btn-sm transition-all duration-200 flex items-center ${
+            isInRoadmap 
+              ? 'btn-success cursor-not-allowed opacity-75' 
               : 'btn-primary'
           }`}
         >
-          {isAdded ? (
+          {isInRoadmap ? (
             <>
-              <Check className="h-4 w-4 mr-1" />
-              Added!
+              <Check className="h-4 w-4 mr-1.5" />
+              <span>Added to Roadmap</span>
             </>
           ) : (
             <>
-              <Plus className="h-4 w-4 mr-1" />
-              Add to Roadmap
+              <Plus className="h-4 w-4 mr-1.5" />
+              <span>Add to Roadmap</span>
             </>
           )}
         </button>

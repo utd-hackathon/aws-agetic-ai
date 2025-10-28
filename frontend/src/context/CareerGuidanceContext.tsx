@@ -19,6 +19,7 @@ export interface CareerGuidanceResult {
   curriculum_comparison: any
   skill_analysis: any
   course_recommendations: any[]
+  project_recommendations?: any[]
   learning_path: any
   projects: any[]
   summary: any

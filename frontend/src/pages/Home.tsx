@@ -8,7 +8,7 @@ import LoadingSpinner from '../components/LoadingSpinner'
 import ErrorMessage from '../components/ErrorMessage'
 import LoadingState from '../components/ui/LoadingState'
 import ProgressTracker from '../components/ui/ProgressTracker'
-import { Brain, Target, Lightbulb, Zap, Clock, Users, TrendingUp } from 'lucide-react'
+import { Brain, Target, Lightbulb, Zap, TrendingUp } from 'lucide-react'
 
 const Home: React.FC = () => {
   const navigate = useNavigate()
@@ -190,28 +190,28 @@ const Home: React.FC = () => {
         
         {/* Form Type Toggle */}
         <div className="flex justify-center mb-8">
-          <div className="bg-white rounded-xl p-1 shadow-md border border-secondary-200">
+          <div className="bg-white rounded-xl p-1 shadow-md border border-secondary-200 flex gap-1">
             <button
               onClick={() => setFormType('quick')}
-              className={`px-8 py-3 rounded-lg transition-all duration-200 flex items-center space-x-2 ${
+              className={`px-8 py-3 rounded-lg transition-all duration-200 flex items-center justify-center space-x-2 whitespace-nowrap ${
                 formType === 'quick'
                   ? 'bg-primary-600 text-white shadow-md'
                   : 'text-secondary-600 hover:text-primary-600 hover:bg-primary-50'
               }`}
             >
-              <Zap className="h-4 w-4" />
+              <Zap className="h-4 w-4 flex-shrink-0" />
               <span className="font-medium">Quick Start</span>
               <span className="text-sm opacity-75">(30s)</span>
             </button>
             <button
               onClick={() => setFormType('comprehensive')}
-              className={`px-8 py-3 rounded-lg transition-all duration-200 flex items-center space-x-2 ${
+              className={`px-8 py-3 rounded-lg transition-all duration-200 flex items-center justify-center space-x-2 whitespace-nowrap ${
                 formType === 'comprehensive'
                   ? 'bg-primary-600 text-white shadow-md'
                   : 'text-secondary-600 hover:text-primary-600 hover:bg-primary-50'
               }`}
             >
-              <Target className="h-4 w-4" />
+              <Target className="h-4 w-4 flex-shrink-0" />
               <span className="font-medium">Comprehensive</span>
               <span className="text-sm opacity-75">(5min)</span>
             </button>

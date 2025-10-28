@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { 
-  TrendingUp, 
   DollarSign, 
   MapPin, 
   Users, 
@@ -8,7 +7,6 @@ import {
   ExternalLink,
   ChevronDown,
   ChevronUp,
-  Star,
   Briefcase
 } from 'lucide-react'
 

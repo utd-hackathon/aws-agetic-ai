@@ -3,7 +3,6 @@ import {
   BookOpen, 
   Clock, 
   Users, 
-  Star, 
   ChevronDown, 
   ChevronUp, 
   Plus,
@@ -31,6 +30,7 @@ interface CourseCardProps {
   isSelected?: boolean
   onSelect?: (course: Course) => void
   onAddToPlan?: (course: Course) => void
+  isInPlan?: boolean
   showActions?: boolean
   className?: string
 }
@@ -40,11 +40,11 @@ const CourseCard: React.FC<CourseCardProps> = ({
   isSelected = false,
   onSelect,
   onAddToPlan,
+  isInPlan = false,
   showActions = true,
   className = ''
 }) => {
   const [isExpanded, setIsExpanded] = useState(false)
-  const [isAdded, setIsAdded] = useState(false)
 
   // Handle both backend field names (title vs course_name, etc.)
   const courseName = (course as any).title || course.course_name || 'Untitled Course'
@@ -80,15 +80,19 @@ const CourseCard: React.FC<CourseCardProps> = ({
   const PriorityIcon = config.icon
 
   const handleAddToPlan = () => {
-    setIsAdded(true)
     onAddToPlan?.(course)
-    
-    // Reset after animation
-    setTimeout(() => setIsAdded(false), 2000)
   }
 
   // Backend returns relevance_score as 0-10, convert to 0-100 percentage
   const relevancePercentage = Math.round((course.relevance_score || 0) * 10)
+
+  const handleCardClick = () => {
+    // Only allow card click to select if showActions is false
+    // Otherwise, selection should only happen via the button
+    if (!showActions && onSelect) {
+      onSelect(course)
+    }
+  }
 
   return (
     <div 
@@ -98,7 +102,7 @@ const CourseCard: React.FC<CourseCardProps> = ({
         ${className}
         transition-all duration-300
       `}
-      onClick={() => onSelect?.(course)}
+      onClick={handleCardClick}
     >
       {/* Header */}
       <div className="flex items-start justify-between mb-4">
@@ -247,22 +251,22 @@ const CourseCard: React.FC<CourseCardProps> = ({
               e.stopPropagation()
               handleAddToPlan()
             }}
-            disabled={isAdded}
-            className={`btn-sm transition-all duration-200 ${
-              isAdded 
-                ? 'btn-success' 
+            disabled={isInPlan}
+            className={`btn-sm transition-all duration-200 flex items-center ${
+              isInPlan 
+                ? 'btn-success cursor-not-allowed opacity-75' 
                 : 'btn-primary'
             }`}
           >
-            {isAdded ? (
+            {isInPlan ? (
               <>
-                <Check className="h-4 w-4 mr-1" />
-                Added!
+                <Check className="h-4 w-4 mr-1.5" />
+                <span>Added to Plan</span>
               </>
             ) : (
               <>
-                <Plus className="h-4 w-4 mr-1" />
-                Add to Plan
+                <Plus className="h-4 w-4 mr-1.5" />
+                <span>Add to Plan</span>
               </>
             )}
           </button>
