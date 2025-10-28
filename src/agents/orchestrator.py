@@ -72,6 +72,13 @@ class AgentOrchestrator:
         
         # If Career Matching Agent succeeded, return its comprehensive response
         if career_matching_response.get("success"):
+            # Generate project recommendations FIRST (can't await inside dict literal)
+            project_recommendations = await self._generate_project_recommendations(
+                career_goal, 
+                request.get("current_skills", []), 
+                career_matching_response.get("course_recommendations", [])
+            )
+            
             return {
                 "success": True,
                 "career_goal": career_matching_response.get("career_goal"),
@@ -104,11 +111,7 @@ class AgentOrchestrator:
                 "learning_path": career_matching_response.get("learning_path", {}),
                 
                 # Project recommendations
-                "project_recommendations": await self._generate_project_recommendations(
-                    career_goal, 
-                    request.get("current_skills", []), 
-                    career_matching_response.get("course_recommendations", [])
-                ),
+                "project_recommendations": project_recommendations,
                 
                 # Summary
                 "summary": {
