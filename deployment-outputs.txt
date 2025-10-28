@@ -11,7 +11,7 @@
     },
     {
         "OutputKey": "EC2InstanceIP",
-        "OutputValue": "3.22.248.207",
+        "OutputValue": "18.222.116.12",
         "Description": "The Public IP of the backend EC2 instance for SSH access"
     }
 ]

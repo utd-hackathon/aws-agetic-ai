@@ -200,6 +200,13 @@ class AgeticAiStack(cdk.Stack):
         frontend_bucket.grant_read(oai)
 
         # 5. Create a CloudFront distribution
+        # Note: /api/* pattern will catch all API routes including:
+        #   - /api/career-guidance
+        #   - /api/courses/all
+        #   - /api/onboarding/* (quick-start, comprehensive, options, etc.)
+        #   - /api/project-recommendations
+        #   - /api/agents/status
+        #   - /api/stats
         distribution = cloudfront.Distribution(
             self,
             f"{APP_NAME}-CloudFrontDistribution",
@@ -209,6 +216,7 @@ class AgeticAiStack(cdk.Stack):
                 cache_policy=cloudfront.CachePolicy.CACHING_OPTIMIZED,
             ),
             additional_behaviors={
+                # Primary API endpoint - catches all /api/* routes
                 "/api/*": cloudfront.BehaviorOptions(
                     origin=origins.LoadBalancerV2Origin(alb, protocol_policy=cloudfront.OriginProtocolPolicy.HTTP_ONLY),
                     viewer_protocol_policy=cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
@@ -216,6 +224,7 @@ class AgeticAiStack(cdk.Stack):
                     cache_policy=cloudfront.CachePolicy.CACHING_DISABLED,
                     origin_request_policy=cloudfront.OriginRequestPolicy.ALL_VIEWER,
                 ),
+                # Authentication endpoints
                 "/auth/*": cloudfront.BehaviorOptions(
                     origin=origins.LoadBalancerV2Origin(alb, protocol_policy=cloudfront.OriginProtocolPolicy.HTTP_ONLY),
                     viewer_protocol_policy=cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
@@ -223,6 +232,7 @@ class AgeticAiStack(cdk.Stack):
                     cache_policy=cloudfront.CachePolicy.CACHING_DISABLED,
                     origin_request_policy=cloudfront.OriginRequestPolicy.ALL_VIEWER,
                 ),
+                # API Documentation endpoints
                 "/docs": cloudfront.BehaviorOptions(
                     origin=origins.LoadBalancerV2Origin(alb, protocol_policy=cloudfront.OriginProtocolPolicy.HTTP_ONLY),
                     viewer_protocol_policy=cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
@@ -241,13 +251,7 @@ class AgeticAiStack(cdk.Stack):
                     allowed_methods=cloudfront.AllowedMethods.ALLOW_GET_HEAD,
                     cache_policy=cloudfront.CachePolicy.CACHING_DISABLED,
                 ),
-                "/career-advice": cloudfront.BehaviorOptions(
-                    origin=origins.LoadBalancerV2Origin(alb, protocol_policy=cloudfront.OriginProtocolPolicy.HTTP_ONLY),
-                    viewer_protocol_policy=cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
-                    allowed_methods=cloudfront.AllowedMethods.ALLOW_ALL,
-                    cache_policy=cloudfront.CachePolicy.CACHING_DISABLED,
-                    origin_request_policy=cloudfront.OriginRequestPolicy.ALL_VIEWER,
-                ),
+                # Legacy direct endpoints (for backward compatibility)
                 "/job-market": cloudfront.BehaviorOptions(
                     origin=origins.LoadBalancerV2Origin(alb, protocol_policy=cloudfront.OriginProtocolPolicy.HTTP_ONLY),
                     viewer_protocol_policy=cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
@@ -269,6 +273,7 @@ class AgeticAiStack(cdk.Stack):
                     cache_policy=cloudfront.CachePolicy.CACHING_DISABLED,
                     origin_request_policy=cloudfront.OriginRequestPolicy.ALL_VIEWER,
                 ),
+                # Health check endpoint
                 "/health": cloudfront.BehaviorOptions(
                     origin=origins.LoadBalancerV2Origin(alb, protocol_policy=cloudfront.OriginProtocolPolicy.HTTP_ONLY),
                     viewer_protocol_policy=cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,

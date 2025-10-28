@@ -98,16 +98,36 @@ async def root():
         "linkedin_auth_required": True,
         "timestamp": datetime.utcnow().isoformat(),
         "endpoints": [
+            # Authentication
             "/auth/linkedin",
             "/auth/status", 
             "/auth/logout",
+            
+            # Career Guidance
             "/api/career-guidance",
+            "/api/onboarding/quick-start",
+            "/api/onboarding/comprehensive",
+            "/api/onboarding/options",
+            "/api/onboarding/suggest-careers",
+            "/api/onboarding/validate-profile",
+            "/api/onboarding/smart-questions/{career_goal}",
+            
+            # Job Market & Courses
             "/job-market",
             "/course-search",
             "/api/courses/all",
+            
+            # Projects & Agents
+            "/api/project-recommendations",
+            "/api/agents/status",
             "/agent-capabilities",
+            
+            # System
             "/health",
-            "/api/stats"
+            "/api/stats",
+            "/docs",
+            "/redoc",
+            "/openapi.json"
         ]
     }
 
