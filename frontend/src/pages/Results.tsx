@@ -18,7 +18,9 @@ import {
   Clock,
   Plus,
   Trash2,
-  GripVertical
+  GripVertical,
+  Search,
+  X
 } from 'lucide-react'
 
 const Results: React.FC = () => {
@@ -44,6 +46,12 @@ const Results: React.FC = () => {
   ])
   const [draggedCourse, setDraggedCourse] = useState<any>(null)
   const [draggedFromSemester, setDraggedFromSemester] = useState<string | null>(null)
+  
+  // All courses state
+  const [showAllCourses, setShowAllCourses] = useState(false)
+  const [courseSearchQuery, setCourseSearchQuery] = useState('')
+  const [allCourses, setAllCourses] = useState<any[]>([])
+  const [loadingAllCourses, setLoadingAllCourses] = useState(false)
 
   if (!guidanceResult || !userProfile) {
     return (
@@ -332,42 +340,165 @@ Generated on: ${new Date().toLocaleDateString()}
     </div>
   )
 
-  const renderCourses = () => (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-semibold text-secondary-900">Course Recommendations</h2>
-        <div className="text-sm text-secondary-500">
-          {selectedCourses.length} of {guidanceResult.course_recommendations?.length || 0} selected
-        </div>
-      </div>
+  const renderCourses = () => {
+    // Load all courses function
+    const loadAllCourses = async () => {
+      if (allCourses.length > 0) {
+        setShowAllCourses(true)
+        return
+      }
       
-      {guidanceResult.course_recommendations && guidanceResult.course_recommendations.length > 0 ? (
-        <div className="grid gap-6">
-          {guidanceResult.course_recommendations.map((course: any, index: number) => (
-            <CourseCard
-              key={index}
-              course={course}
-              isSelected={isCourseInPlan(course)}
-              onAddToPlan={handleCourseSelect}
-              isInPlan={isCourseInPlan(course)}
-            />
-          ))}
-        </div>
-      ) : (
-        <div className="card text-center py-12">
-          <div className="text-secondary-400 mb-4">
-            <BookOpen className="h-16 w-16 mx-auto" />
+      setLoadingAllCourses(true)
+      try {
+        // Mock data - In production, this would call an API endpoint
+        // For now, we'll use a placeholder. You can replace this with actual API call
+        const mockCourses = [
+          ...( guidanceResult.course_recommendations || [])
+        ]
+        setAllCourses(mockCourses)
+        setShowAllCourses(true)
+        showToast('All courses loaded', 'success')
+      } catch (error) {
+        console.error('Error loading all courses:', error)
+        showToast('Failed to load all courses', 'error')
+      } finally {
+        setLoadingAllCourses(false)
+      }
+    }
+    
+    // Filter courses based on search query
+    const getFilteredCourses = () => {
+      const coursesToFilter = showAllCourses ? allCourses : (guidanceResult.course_recommendations || [])
+      
+      if (!courseSearchQuery.trim()) {
+        return coursesToFilter
+      }
+      
+      const query = courseSearchQuery.toLowerCase()
+      return coursesToFilter.filter((course: any) => {
+        const courseName = (course.title || course.course_name || '').toLowerCase()
+        const courseCode = (course.course_code || course.code || '').toLowerCase()
+        const department = (course.department || '').toLowerCase()
+        
+        return courseName.includes(query) || 
+               courseCode.includes(query) || 
+               department.includes(query)
+      })
+    }
+    
+    const filteredCourses = getFilteredCourses()
+    const displayTitle = showAllCourses ? 'All Available Courses' : 'Course Recommendations'
+    
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <h2 className="text-2xl font-semibold text-secondary-900">{displayTitle}</h2>
+          <div className="flex items-center space-x-3">
+            <div className="text-sm text-secondary-500">
+              {selectedCourses.length} selected
+            </div>
+            {!showAllCourses && (
+              <button
+                onClick={loadAllCourses}
+                disabled={loadingAllCourses}
+                className="btn-outline btn-sm flex items-center space-x-2"
+              >
+                <BookOpen className="h-4 w-4" />
+                <span>{loadingAllCourses ? 'Loading...' : 'Browse All Courses'}</span>
+              </button>
+            )}
+            {showAllCourses && (
+              <button
+                onClick={() => {
+                  setShowAllCourses(false)
+                  setCourseSearchQuery('')
+                }}
+                className="btn-outline btn-sm flex items-center space-x-2"
+              >
+                <X className="h-4 w-4" />
+                <span>Show Recommendations Only</span>
+              </button>
+            )}
           </div>
-          <h3 className="text-lg font-medium text-secondary-700 mb-2">
-            No Course Recommendations Available
-          </h3>
-          <p className="text-secondary-600">
-            Course recommendations will be generated based on your career goals and skills.
-          </p>
         </div>
-      )}
-    </div>
-  )
+        
+        {/* Search Bar */}
+        {(showAllCourses || guidanceResult.course_recommendations.length > 5) && (
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <Search className="h-5 w-5 text-secondary-400" />
+            </div>
+            <input
+              type="text"
+              value={courseSearchQuery}
+              onChange={(e) => setCourseSearchQuery(e.target.value)}
+              placeholder="Search by course name, code, or department..."
+              className="input-field pl-10 pr-10"
+            />
+            {courseSearchQuery && (
+              <button
+                onClick={() => setCourseSearchQuery('')}
+                className="absolute inset-y-0 right-0 pr-3 flex items-center"
+              >
+                <X className="h-5 w-5 text-secondary-400 hover:text-secondary-600" />
+              </button>
+            )}
+          </div>
+        )}
+        
+        {/* Course Count */}
+        {courseSearchQuery && (
+          <div className="text-sm text-secondary-600">
+            Found {filteredCourses.length} course{filteredCourses.length !== 1 ? 's' : ''}
+          </div>
+        )}
+        
+        {filteredCourses.length > 0 ? (
+          <div className="grid gap-6">
+            {filteredCourses.map((course: any, index: number) => (
+              <CourseCard
+                key={index}
+                course={course}
+                isSelected={isCourseInPlan(course)}
+                onAddToPlan={handleCourseSelect}
+                isInPlan={isCourseInPlan(course)}
+              />
+            ))}
+          </div>
+        ) : courseSearchQuery ? (
+          <div className="card text-center py-12">
+            <div className="text-secondary-400 mb-4">
+              <Search className="h-16 w-16 mx-auto" />
+            </div>
+            <h3 className="text-lg font-medium text-secondary-700 mb-2">
+              No Courses Found
+            </h3>
+            <p className="text-secondary-600">
+              Try adjusting your search query or browse all courses
+            </p>
+            <button
+              onClick={() => setCourseSearchQuery('')}
+              className="btn-secondary btn-sm mt-4"
+            >
+              Clear Search
+            </button>
+          </div>
+        ) : (
+          <div className="card text-center py-12">
+            <div className="text-secondary-400 mb-4">
+              <BookOpen className="h-16 w-16 mx-auto" />
+            </div>
+            <h3 className="text-lg font-medium text-secondary-700 mb-2">
+              No Course Recommendations Available
+            </h3>
+            <p className="text-secondary-600">
+              Course recommendations will be generated based on your career goals and skills.
+            </p>
+          </div>
+        )}
+      </div>
+    )
+  }
 
   const renderJobs = () => (
     <div className="space-y-6">
@@ -566,21 +697,36 @@ Generated on: ${new Date().toLocaleDateString()}
   const handleDrop = (toSemesterId: string) => {
     if (!draggedCourse) return
     
-    // Remove from source
-    if (draggedFromSemester) {
-      setSemesters(semesters.map(sem => {
-        if (sem.id === draggedFromSemester) {
-          return {
-            ...sem,
-            courses: sem.courses.filter(c => getCourseId(c) !== getCourseId(draggedCourse))
-          }
-        }
-        return sem
-      }))
+    // Don't do anything if dropping in the same semester
+    if (draggedFromSemester === toSemesterId) {
+      setDraggedCourse(null)
+      setDraggedFromSemester(null)
+      return
     }
     
-    // Add to destination
+    // Check if course already exists in destination semester
+    const destinationSemester = semesters.find(sem => sem.id === toSemesterId)
+    const courseAlreadyInDestination = destinationSemester?.courses.some(
+      c => getCourseId(c) === getCourseId(draggedCourse)
+    )
+    
+    if (courseAlreadyInDestination) {
+      showToast('Course is already in this semester', 'error')
+      setDraggedCourse(null)
+      setDraggedFromSemester(null)
+      return
+    }
+    
+    // Update semesters in a single operation
     setSemesters(semesters.map(sem => {
+      // Remove from source semester
+      if (draggedFromSemester && sem.id === draggedFromSemester) {
+        return {
+          ...sem,
+          courses: sem.courses.filter(c => getCourseId(c) !== getCourseId(draggedCourse))
+        }
+      }
+      // Add to destination semester
       if (sem.id === toSemesterId) {
         return {
           ...sem,
