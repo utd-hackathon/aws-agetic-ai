@@ -236,13 +236,17 @@ class AgentOrchestrator:
             result = await self.project_advisor_agent.process_request(project_request)
             
             if result.get("success") and result.get("projects"):
+                print(f"✅ Generated {len(result['projects'])} project recommendations")
                 return result["projects"]
             else:
                 # Return empty list if no projects found
+                print(f"⚠️ No projects returned from advisor. Result: {result.get('error', 'Unknown')}")
                 return []
                 
         except Exception as e:
-            print(f"⚠️ Error generating project recommendations: {e}")
+            print(f"❌ Error generating project recommendations: {e}")
+            import traceback
+            traceback.print_exc()
             return []
 
     def _process_get_all_courses_request(self, request: Dict[str, Any]) -> Dict[str, Any]:
