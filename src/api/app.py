@@ -1,9 +1,12 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from typing import List, Dict, Any, Optional
 from datetime import datetime
 import uvicorn
+import os
+from pathlib import Path
 from src.agents.orchestrator import AgentOrchestrator
 from src.auth.linkedin_auth import require_linkedin_auth, linkedin_auth
 from src.api.user_onboarding import (
@@ -21,7 +24,13 @@ app = FastAPI(
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Configure for production
+    allow_origins=[
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        "*"  # Allow all origins for production CloudFront deployment
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -32,6 +41,11 @@ orchestrator = AgentOrchestrator()
 
 # Initialize user onboarding service
 onboarding_service = UserOnboardingService()
+
+# Serve static frontend files if they exist (for integrated deployment)
+frontend_dist_path = Path(__file__).parent.parent.parent / "frontend_dist"
+if frontend_dist_path.exists() and frontend_dist_path.is_dir():
+    app.mount("/assets", StaticFiles(directory=str(frontend_dist_path / "assets")), name="assets")
 
 # Define request models
 class CareerQueryRequest(BaseModel):
@@ -483,6 +497,22 @@ async def get_system_stats():
 async def get_agent_capabilities():
     """Get capabilities of all agents in the system"""
     return orchestrator.get_agent_capabilities()
+
+# Serve frontend index.html for integrated deployment
+@app.get("/{full_path:path}")
+async def serve_frontend(full_path: str):
+    """Serve the frontend application for integrated deployment"""
+    from fastapi.responses import FileResponse
+
+    frontend_dist_path = Path(__file__).parent.parent.parent / "frontend_dist"
+    if not frontend_dist_path.exists():
+        raise HTTPException(status_code=404, detail="Frontend not found")
+
+    # Serve index.html for all non-API routes (SPA routing)
+    index_path = frontend_dist_path / "index.html"
+    if index_path.exists():
+        return FileResponse(index_path)
+    raise HTTPException(status_code=404, detail="Frontend index.html not found")
 
 if __name__ == "__main__":
     uvicorn.run("api.app:app", host="0.0.0.0", port=8000, reload=True)

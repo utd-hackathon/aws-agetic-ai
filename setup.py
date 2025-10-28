@@ -54,7 +54,7 @@ def setup_backend():
     if not aws_key or not aws_secret:
         print("⚠️  AWS credentials not found in environment variables")
         print("   Please set AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY")
-        print("   You can also set AWS_DEFAULT_REGION (default: us-east-1)")
+        print("   You can also set AWS_DEFAULT_REGION (default: us-east-2)")
     
     return True
 
@@ -106,7 +106,7 @@ def main():
     print("1. Set your AWS credentials:")
     print("   export AWS_ACCESS_KEY_ID=your_access_key")
     print("   export AWS_SECRET_ACCESS_KEY=your_secret_key")
-    print("   export AWS_DEFAULT_REGION=us-east-1")
+    print("   export AWS_DEFAULT_REGION=us-east-2")
     print("\n2. Start the backend server:")
     print("   python start_server.py")
     print("\n3. Start the frontend (in another terminal):")

@@ -1,12 +1,19 @@
 import axios from 'axios'
 
-const API_BASE_URL = '' // Use a relative path for API requests
+// Use environment variable for API URL
+// In production (CloudFront), VITE_API_URL will be empty to use relative paths
+// In development, it should point to local backend or be empty to use proxy
+const API_BASE_URL = import.meta.env.VITE_API_URL !== undefined 
+  ? import.meta.env.VITE_API_URL 
+  : ''
 
 const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
   },
+  // Don't send credentials for CORS requests unless needed
+  withCredentials: false,
 })
 
 export interface QuickStartProfile {

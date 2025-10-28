@@ -42,7 +42,7 @@ pip install -r requirements.txt
 # Set up environment variables
 export AWS_ACCESS_KEY_ID=your_access_key
 export AWS_SECRET_ACCESS_KEY=your_secret_key
-export AWS_DEFAULT_REGION=us-east-1
+export AWS_DEFAULT_REGION=us-east-2
 
 # Start the server
 python start_server.py

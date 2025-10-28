@@ -1,0 +1,17 @@
+[
+    {
+        "OutputKey": "CloudFrontURL",
+        "OutputValue": "https://d20l3dy3iic6s3.cloudfront.net",
+        "Description": "The URL for the frontend application (use this URL)"
+    },
+    {
+        "OutputKey": "LoadBalancerURL",
+        "OutputValue": "http://aws-agetic-ai-alb-715074230.us-east-2.elb.amazonaws.com",
+        "Description": "The Load Balancer URL for the backend API"
+    },
+    {
+        "OutputKey": "EC2InstanceIP",
+        "OutputValue": "3.15.237.51",
+        "Description": "The Public IP of the backend EC2 instance for SSH access"
+    }
+]

@@ -32,7 +32,7 @@ def check_aws_credentials():
         print("   For full functionality, set:")
         print("   export AWS_ACCESS_KEY_ID=your_access_key")
         print("   export AWS_SECRET_ACCESS_KEY=your_secret_key")
-        print("   export AWS_DEFAULT_REGION=us-east-1")
+        print("   export AWS_DEFAULT_REGION=us-east-2")
         return False
     
     print("✅ AWS credentials found")

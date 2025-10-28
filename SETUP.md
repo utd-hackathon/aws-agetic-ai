@@ -17,7 +17,7 @@ Create a `.env` file in the `aws-agetic-ai` directory:
 # AWS Bedrock Configuration (Optional - system uses fallback if not configured)
 AWS_ACCESS_KEY_ID=your_aws_access_key
 AWS_SECRET_ACCESS_KEY=your_aws_secret_key
-AWS_REGION=us-east-1
+AWS_REGION=us-east-2
 BEDROCK_MODEL_ID=anthropic.claude-3-haiku-20240307-v1:0
 
 # LinkedIn Credentials (Optional - for real job scraping)

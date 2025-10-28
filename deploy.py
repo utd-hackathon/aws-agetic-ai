@@ -12,7 +12,10 @@ from aws_cdk import (
     aws_ecr_assets as ecr_assets,
     aws_ec2 as ec2,
     aws_iam as iam,
+    aws_elasticloadbalancingv2 as elbv2,
+    aws_elasticloadbalancingv2_targets as targets,
     RemovalPolicy,
+    Duration,
 )
 from constructs import Construct
 
@@ -39,8 +42,7 @@ class AgeticAiStack(cdk.Stack):
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
 
-        # --- Backend Deployment (EC2 Instance) ---
-        # Backend is created first so its IP is available for the CloudFront origin.
+        # --- Backend Deployment (EC2 Instance with Load Balancer) ---
 
         # 1. Define the VPC
         vpc = ec2.Vpc(self, f"{APP_NAME}-Vpc", max_azs=2)
@@ -63,53 +65,108 @@ class AgeticAiStack(cdk.Stack):
             )
         )
 
-        # 4. Create the EC2 instance with an SSH key pair
+        # 4. Create security groups
+        # ALB Security Group
+        alb_sg = ec2.SecurityGroup(
+            self,
+            f"{APP_NAME}-ALBSG",
+            vpc=vpc,
+            description="Security group for Application Load Balancer",
+            allow_all_outbound=True  # Allow ALB to reach EC2 instances
+        )
+        alb_sg.add_ingress_rule(ec2.Peer.any_ipv4(), ec2.Port.tcp(80), "Allow HTTP from internet")
+        
+        # EC2 Instance Security Group
+        instance_sg = ec2.SecurityGroup(
+            self,
+            f"{APP_NAME}-InstanceSG",
+            vpc=vpc,
+            description="Security group for backend EC2 instance",
+            allow_all_outbound=True
+        )
+        instance_sg.add_ingress_rule(alb_sg, ec2.Port.tcp(80), "Allow HTTP from ALB")
+        instance_sg.add_ingress_rule(ec2.Peer.any_ipv4(), ec2.Port.tcp(22), "Allow SSH")
+
+        # 5. Create the EC2 instance
         instance = ec2.Instance(
             self,
             f"{APP_NAME}-Instance",
             vpc=vpc,
-            instance_type=ec2.InstanceType("t3.micro"),
+            instance_type=ec2.InstanceType("t3.small"),  # Upgraded for better performance
             machine_image=ec2.MachineImage.latest_amazon_linux2023(),
             role=ec2_role,
             vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PUBLIC),
-            key_name="aws-agetic-ai-key", # CRITICAL: Assumes you created this key pair
+            security_group=instance_sg,
+            key_pair=ec2.KeyPair.from_key_pair_name(self, f"{APP_NAME}-KeyPair", "aws-agetic-ai-key"),
         )
 
-        # 5. Create an Elastic IP and associate it with the instance
-        eip = ec2.CfnEIP(self, f"{APP_NAME}-EIP")
-        ec2.CfnEIPAssociation(
-            self,
-            f"{APP_NAME}-EIPAssociation",
-            eip=eip.ref,
-            instance_id=instance.instance_id,
-        )
-
-        # 6. Add a simplified and corrected User Data script
+        # 6. Add User Data script to set up Docker and run the application
         instance.user_data.add_commands(
-            "exec > /home/ec2-user/user-data.log 2>&1",  # Log to a user-writable directory
-            "set -x",  # Echo all commands to the log file
+            "exec > /home/ec2-user/user-data.log 2>&1",
+            "set -x",
             "dnf update -y",
             "dnf install -y docker",
-            "systemctl start docker",  # Correct command for Amazon Linux 2023
-            "systemctl enable docker", # Ensure Docker starts on reboot
+            "systemctl start docker",
+            "systemctl enable docker",
             "usermod -a -G docker ec2-user",
             f"aws ecr get-login-password --region {self.region} | docker login --username AWS --password-stdin {self.account}.dkr.ecr.{self.region}.amazonaws.com",
             f"docker pull {backend_image.image_uri}",
-            f"docker run -d -p 80:8080 "
+            f"docker run -d -p 80:8080 --restart unless-stopped "
             f"-e AWS_REGION={self.region} "
             f"-e BEDROCK_MODEL_ID='anthropic.claude-3-sonnet-20240229-v1:0' "
             f"{backend_image.image_uri}",
         )
 
-        # 7. Open ports for HTTP, HTTPS, and SSH
-        instance.connections.allow_from_any_ipv4(ec2.Port.tcp(80), "Allow HTTP In from anywhere")
-        instance.connections.allow_from_any_ipv4(ec2.Port.tcp(443), "Allow HTTPS In")
-        instance.connections.allow_from_any_ipv4(ec2.Port.tcp(22), "Allow SSH In for debugging")
+        # 7. Create Application Load Balancer
+        alb = elbv2.ApplicationLoadBalancer(
+            self,
+            f"{APP_NAME}-ALB",
+            vpc=vpc,
+            internet_facing=True,
+            load_balancer_name=f"{APP_NAME}-alb",
+            security_group=alb_sg
+        )
 
+        # 8. Create target group
+        target_group = elbv2.ApplicationTargetGroup(
+            self,
+            f"{APP_NAME}-TargetGroup",
+            vpc=vpc,
+            port=80,
+            protocol=elbv2.ApplicationProtocol.HTTP,
+            target_type=elbv2.TargetType.INSTANCE,
+            health_check=elbv2.HealthCheck(
+                path="/health",
+                interval=Duration.seconds(30),
+                timeout=Duration.seconds(5),
+                healthy_threshold_count=2,
+                unhealthy_threshold_count=3
+            )
+        )
+        
+        # Add the EC2 instance to the target group
+        target_group.add_target(targets.InstanceTarget(instance))
+
+        # 9. Add listener to ALB
+        listener = alb.add_listener(
+            f"{APP_NAME}-Listener",
+            port=80,
+            protocol=elbv2.ApplicationProtocol.HTTP,
+            default_target_groups=[target_group]
+        )
 
         # --- Frontend Deployment (S3 + CloudFront) ---
 
-        # 1. Build the frontend application
+        # 1. Create environment file with empty API URL to use relative paths through CloudFront
+        # This ensures all API requests go through CloudFront to the backend
+        env_content = "VITE_API_URL=\n"
+        
+        env_file_path = os.path.join(FRONTEND_PATH, ".env.production")
+        with open(env_file_path, "w") as f:
+            f.write(env_content)
+        print("Created frontend .env.production with relative API URL for CloudFront routing")
+
+        # 2. Build the frontend application
         print("Building frontend application...")
         try:
             subprocess.run(
@@ -126,42 +183,117 @@ class AgeticAiStack(cdk.Stack):
             print(e.stderr.decode())
             raise
 
-        # 2. Create a private S3 bucket for the frontend static site
+        # 3. Create a private S3 bucket for the frontend static site
         frontend_bucket = s3.Bucket(
             self,
             f"{APP_NAME}-FrontendBucket",
-            bucket_name=f"{APP_NAME.lower()}-{ACCOUNT}-{REGION}",
-            block_public_access=s3.BlockPublicAccess.BLOCK_ALL, # Keep the bucket private
+            bucket_name=f"{APP_NAME.lower()}-frontend-{ACCOUNT}-{REGION}",
+            block_public_access=s3.BlockPublicAccess.BLOCK_ALL,
             removal_policy=RemovalPolicy.DESTROY,
             auto_delete_objects=True,
         )
 
-        # 3. Create a CloudFront Origin Access Identity (OAI)
+        # 4. Create a CloudFront Origin Access Identity (OAI)
         oai = cloudfront.OriginAccessIdentity(
             self, f"{APP_NAME}-OAI"
         )
         frontend_bucket.grant_read(oai)
 
-        # 4. Create a CloudFront distribution with behaviors for frontend and backend
+        # 5. Create a CloudFront distribution
         distribution = cloudfront.Distribution(
             self,
             f"{APP_NAME}-CloudFrontDistribution",
             default_behavior=cloudfront.BehaviorOptions(
-                origin=origins.S3Origin(frontend_bucket, origin_access_identity=oai)
+                origin=origins.S3Origin(frontend_bucket, origin_access_identity=oai),
+                viewer_protocol_policy=cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+                cache_policy=cloudfront.CachePolicy.CACHING_OPTIMIZED,
             ),
-            default_root_object="index.html",
             additional_behaviors={
                 "/api/*": cloudfront.BehaviorOptions(
-                    origin=origins.HttpOrigin(instance.instance_public_dns_name),
+                    origin=origins.LoadBalancerV2Origin(alb, protocol_policy=cloudfront.OriginProtocolPolicy.HTTP_ONLY),
                     viewer_protocol_policy=cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
                     allowed_methods=cloudfront.AllowedMethods.ALLOW_ALL,
                     cache_policy=cloudfront.CachePolicy.CACHING_DISABLED,
-                    origin_request_policy=cloudfront.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER,
+                    origin_request_policy=cloudfront.OriginRequestPolicy.ALL_VIEWER,
+                ),
+                "/auth/*": cloudfront.BehaviorOptions(
+                    origin=origins.LoadBalancerV2Origin(alb, protocol_policy=cloudfront.OriginProtocolPolicy.HTTP_ONLY),
+                    viewer_protocol_policy=cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+                    allowed_methods=cloudfront.AllowedMethods.ALLOW_ALL,
+                    cache_policy=cloudfront.CachePolicy.CACHING_DISABLED,
+                    origin_request_policy=cloudfront.OriginRequestPolicy.ALL_VIEWER,
+                ),
+                "/docs": cloudfront.BehaviorOptions(
+                    origin=origins.LoadBalancerV2Origin(alb, protocol_policy=cloudfront.OriginProtocolPolicy.HTTP_ONLY),
+                    viewer_protocol_policy=cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+                    allowed_methods=cloudfront.AllowedMethods.ALLOW_GET_HEAD,
+                    cache_policy=cloudfront.CachePolicy.CACHING_DISABLED,
+                ),
+                "/openapi.json": cloudfront.BehaviorOptions(
+                    origin=origins.LoadBalancerV2Origin(alb, protocol_policy=cloudfront.OriginProtocolPolicy.HTTP_ONLY),
+                    viewer_protocol_policy=cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+                    allowed_methods=cloudfront.AllowedMethods.ALLOW_GET_HEAD,
+                    cache_policy=cloudfront.CachePolicy.CACHING_DISABLED,
+                ),
+                "/redoc": cloudfront.BehaviorOptions(
+                    origin=origins.LoadBalancerV2Origin(alb, protocol_policy=cloudfront.OriginProtocolPolicy.HTTP_ONLY),
+                    viewer_protocol_policy=cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+                    allowed_methods=cloudfront.AllowedMethods.ALLOW_GET_HEAD,
+                    cache_policy=cloudfront.CachePolicy.CACHING_DISABLED,
+                ),
+                "/career-advice": cloudfront.BehaviorOptions(
+                    origin=origins.LoadBalancerV2Origin(alb, protocol_policy=cloudfront.OriginProtocolPolicy.HTTP_ONLY),
+                    viewer_protocol_policy=cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+                    allowed_methods=cloudfront.AllowedMethods.ALLOW_ALL,
+                    cache_policy=cloudfront.CachePolicy.CACHING_DISABLED,
+                    origin_request_policy=cloudfront.OriginRequestPolicy.ALL_VIEWER,
+                ),
+                "/job-market": cloudfront.BehaviorOptions(
+                    origin=origins.LoadBalancerV2Origin(alb, protocol_policy=cloudfront.OriginProtocolPolicy.HTTP_ONLY),
+                    viewer_protocol_policy=cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+                    allowed_methods=cloudfront.AllowedMethods.ALLOW_ALL,
+                    cache_policy=cloudfront.CachePolicy.CACHING_DISABLED,
+                    origin_request_policy=cloudfront.OriginRequestPolicy.ALL_VIEWER,
+                ),
+                "/course-search": cloudfront.BehaviorOptions(
+                    origin=origins.LoadBalancerV2Origin(alb, protocol_policy=cloudfront.OriginProtocolPolicy.HTTP_ONLY),
+                    viewer_protocol_policy=cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+                    allowed_methods=cloudfront.AllowedMethods.ALLOW_ALL,
+                    cache_policy=cloudfront.CachePolicy.CACHING_DISABLED,
+                    origin_request_policy=cloudfront.OriginRequestPolicy.ALL_VIEWER,
+                ),
+                "/agent-capabilities": cloudfront.BehaviorOptions(
+                    origin=origins.LoadBalancerV2Origin(alb, protocol_policy=cloudfront.OriginProtocolPolicy.HTTP_ONLY),
+                    viewer_protocol_policy=cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+                    allowed_methods=cloudfront.AllowedMethods.ALLOW_ALL,
+                    cache_policy=cloudfront.CachePolicy.CACHING_DISABLED,
+                    origin_request_policy=cloudfront.OriginRequestPolicy.ALL_VIEWER,
+                ),
+                "/health": cloudfront.BehaviorOptions(
+                    origin=origins.LoadBalancerV2Origin(alb, protocol_policy=cloudfront.OriginProtocolPolicy.HTTP_ONLY),
+                    viewer_protocol_policy=cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+                    allowed_methods=cloudfront.AllowedMethods.ALLOW_GET_HEAD,
+                    cache_policy=cloudfront.CachePolicy.CACHING_DISABLED,
+                ),
+            },
+            default_root_object="index.html",
+            error_responses=[
+                cloudfront.ErrorResponse(
+                    http_status=404,
+                    response_http_status=200,
+                    response_page_path="/index.html",
+                    ttl=Duration.seconds(0)
+                ),
+                cloudfront.ErrorResponse(
+                    http_status=403,
+                    response_http_status=200,
+                    response_page_path="/index.html",
+                    ttl=Duration.seconds(0)
                 )
-            }
+            ]
         )
 
-        # 5. Deploy the built frontend to the S3 bucket
+        # 6. Deploy the built frontend to the S3 bucket
         s3_deployment.BucketDeployment(
             self,
             f"{APP_NAME}-S3Deployment",
@@ -176,13 +308,19 @@ class AgeticAiStack(cdk.Stack):
             self,
             "CloudFrontURL",
             value=f"https://{distribution.distribution_domain_name}",
-            description="The URL for the frontend and API.",
+            description="The URL for the frontend application (use this URL)",
         )
         cdk.CfnOutput(
             self,
-            "EC2_Backend_URL",
-            value=f"http://{eip.ref}",
-            description="The Public IP of the backend EC2 instance for direct access/debugging.",
+            "LoadBalancerURL",
+            value=f"http://{alb.load_balancer_dns_name}",
+            description="The Load Balancer URL for the backend API",
+        )
+        cdk.CfnOutput(
+            self,
+            "EC2InstanceIP",
+            value=instance.instance_public_ip,
+            description="The Public IP of the backend EC2 instance for SSH access",
         )
 
 
