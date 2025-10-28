@@ -1,4 +1,4 @@
-ws#!/bin/bash
+#!/bin/bash
 
 # Local Development Script for AWS Agetic AI Career Guidance System
 # This script sets up and runs both backend and frontend locally
@@ -49,7 +49,7 @@ echo ""
 
 # Check Python
 if ! command -v python3 &> /dev/null; then
-    print_error "Python 3 is not installed. Please install Python 3.11+ first."
+    print_error "Python is not installed. Please install Python 3.11+ first."
     exit 1
 fi
 print_success "Python is installed ($(python3 --version))"
@@ -159,7 +159,7 @@ trap cleanup SIGINT SIGTERM
 # Start backend in background
 print_info "Starting backend server..."
 source venv/bin/activate
-python3 -m uvicorn src.api.app:app --reload --host 127.0.0.1 --port 8000 > backend.log 2>&1 &
+python -m uvicorn src.api.app:app --reload --host 127.0.0.1 --port 8000 > backend.log 2>&1 &
 BACKEND_PID=$!
 
 # Wait a moment for backend to start

@@ -14,7 +14,11 @@ import {
   Target,
   Calendar,
   CheckCircle,
-  Star
+  Star,
+  Clock,
+  Plus,
+  Trash2,
+  GripVertical
 } from 'lucide-react'
 
 const Results: React.FC = () => {
@@ -24,6 +28,22 @@ const Results: React.FC = () => {
   const [selectedCourses, setSelectedCourses] = useState<any[]>([])
   const [selectedProjects, setSelectedProjects] = useState<any[]>([])
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'info' | 'error' } | null>(null)
+  
+  // Semester planning state
+  interface Semester {
+    id: string
+    name: string
+    season: 'Fall' | 'Spring' | 'Summer'
+    year: number
+    courses: any[]
+  }
+  
+  const [semesters, setSemesters] = useState<Semester[]>([
+    { id: '1', name: 'Fall 2024', season: 'Fall', year: 2024, courses: [] },
+    { id: '2', name: 'Spring 2025', season: 'Spring', year: 2025, courses: [] }
+  ])
+  const [draggedCourse, setDraggedCourse] = useState<any>(null)
+  const [draggedFromSemester, setDraggedFromSemester] = useState<string | null>(null)
 
   if (!guidanceResult || !userProfile) {
     return (
@@ -61,12 +81,8 @@ const Results: React.FC = () => {
   }
 
   const handleCourseSelect = (course: any) => {
-    console.log('Course clicked:', course)
     const courseId = getCourseId(course)
-    console.log('Course ID:', courseId)
     const isAdding = !selectedCourses.find(c => getCourseId(c) === courseId)
-    console.log('Is adding:', isAdding)
-    console.log('Selected courses before:', selectedCourses.map(c => getCourseId(c)))
     
     setSelectedCourses(prev => {
       const found = prev.find(c => getCourseId(c) === courseId)
@@ -477,131 +493,446 @@ Generated on: ${new Date().toLocaleDateString()}
     </div>
   )
 
-  const renderRoadmap = () => (
-    <div className="space-y-6">
-      <h2 className="text-2xl font-semibold text-secondary-900">Learning Roadmap</h2>
+  // Semester management functions
+  const addNewSemester = () => {
+    let nextSeason: 'Fall' | 'Spring' | 'Summer'
+    let nextYear: number
+    
+    if (semesters.length === 0) {
+      // If no semesters exist, start with Fall of current year
+      nextSeason = 'Fall'
+      nextYear = 2024
+    } else {
+      const lastSemester = semesters[semesters.length - 1]
+      nextYear = lastSemester.year
       
-      {guidanceResult.learning_path && (
-        <div className="space-y-6">
-          {/* Timeline Overview */}
-          <div className="card bg-gradient-to-r from-primary-50 to-success-50">
-            <h3 className="text-lg font-semibold text-secondary-900 mb-4">Timeline Overview</h3>
-            <div className="grid md:grid-cols-3 gap-4">
-              <div className="text-center">
-                <div className="text-2xl font-bold text-primary-600">
-                  {guidanceResult.learning_path.total_semesters || 'N/A'}
-                </div>
-                <div className="text-sm text-primary-700">Semesters</div>
+      if (lastSemester.season === 'Fall') {
+        nextSeason = 'Spring'
+        nextYear += 1
+      } else if (lastSemester.season === 'Spring') {
+        nextSeason = 'Summer'
+      } else {
+        nextSeason = 'Fall'
+      }
+    }
+    
+    const newSemester: Semester = {
+      id: Date.now().toString(),
+      name: `${nextSeason} ${nextYear}`,
+      season: nextSeason,
+      year: nextYear,
+      courses: []
+    }
+    
+    setSemesters([...semesters, newSemester])
+    showToast(`✓ ${newSemester.name} added`, 'success')
+  }
+  
+  const removeSemester = (semesterId: string) => {
+    const semester = semesters.find(s => s.id === semesterId)
+    if (!semester) return
+    
+    // Move courses back to unassigned
+    if (semester.courses.length > 0) {
+      showToast(`${semester.courses.length} course(s) moved to unassigned`, 'info')
+    }
+    
+    setSemesters(semesters.filter(s => s.id !== semesterId))
+  }
+  
+  const getSemesterCredits = (semester: Semester) => {
+    return semester.courses.reduce((total, course) => {
+      const credits = Number((course as any).semester_credit_hours || course.credit_hours || 3)
+      return total + credits
+    }, 0)
+  }
+  
+  const getUnassignedCourses = () => {
+    const assignedCourseIds = new Set(
+      semesters.flatMap(sem => sem.courses.map(c => getCourseId(c)))
+    )
+    return selectedCourses.filter(course => !assignedCourseIds.has(getCourseId(course)))
+  }
+  
+  const handleDragStart = (course: any, fromSemesterId: string | null) => {
+    setDraggedCourse(course)
+    setDraggedFromSemester(fromSemesterId)
+  }
+  
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault()
+  }
+  
+  const handleDrop = (toSemesterId: string) => {
+    if (!draggedCourse) return
+    
+    // Remove from source
+    if (draggedFromSemester) {
+      setSemesters(semesters.map(sem => {
+        if (sem.id === draggedFromSemester) {
+          return {
+            ...sem,
+            courses: sem.courses.filter(c => getCourseId(c) !== getCourseId(draggedCourse))
+          }
+        }
+        return sem
+      }))
+    }
+    
+    // Add to destination
+    setSemesters(semesters.map(sem => {
+      if (sem.id === toSemesterId) {
+        return {
+          ...sem,
+          courses: [...sem.courses, draggedCourse]
+        }
+      }
+      return sem
+    }))
+    
+    setDraggedCourse(null)
+    setDraggedFromSemester(null)
+  }
+  
+  const removeCourseFromSemester = (semesterId: string, course: any) => {
+    setSemesters(semesters.map(sem => {
+      if (sem.id === semesterId) {
+        return {
+          ...sem,
+          courses: sem.courses.filter(c => getCourseId(c) !== getCourseId(course))
+        }
+      }
+      return sem
+    }))
+    showToast(`Course moved to unassigned`, 'info')
+  }
+
+  const renderRoadmap = () => {
+    const unassignedCourses = getUnassignedCourses()
+    // Only count credits from courses assigned to semesters
+    const totalCredits = semesters.reduce((sum, sem) => sum + getSemesterCredits(sem), 0)
+
+    const handleRemoveCourse = (course: any) => {
+      handleCourseSelect(course) // This toggles the course
+      showToast(`✗ ${course.title || course.course_name} removed from plan`, 'info')
+    }
+
+    const handleRemoveProject = (project: any) => {
+      handleProjectSelect(project) // This toggles the project
+      showToast(`✗ ${project.title} removed from roadmap`, 'info')
+    }
+
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <h2 className="text-2xl font-semibold text-secondary-900">My Learning Roadmap</h2>
+          <button
+            onClick={() => {
+              setSelectedCourses([])
+              setSelectedProjects([])
+              showToast('Roadmap cleared', 'info')
+            }}
+            className="btn-outline btn-sm"
+          >
+            Clear All
+          </button>
+        </div>
+
+        {/* Summary */}
+        <div className="card bg-gradient-to-r from-primary-50 to-success-50">
+          <h3 className="text-lg font-semibold text-secondary-900 mb-4">Roadmap Summary</h3>
+          <div className="grid md:grid-cols-4 gap-4">
+            <div className="text-center">
+              <div className="text-2xl font-bold text-primary-600">
+                {semesters.length}
               </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-success-600">
-                  {guidanceResult.learning_path.total_credit_hours || guidanceResult.learning_path.total_credits || 'N/A'}
-                </div>
-                <div className="text-sm text-success-700">Credit Hours</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-warning-600">
-                  {guidanceResult.learning_path.completion_timeline || guidanceResult.learning_path.estimated_completion || 'N/A'}
-                </div>
-                <div className="text-sm text-warning-700">Completion</div>
-              </div>
+              <div className="text-sm text-primary-700">Semesters</div>
             </div>
-            
-            {/* Rationale */}
-            {guidanceResult.learning_path.rationale && (
-              <div className="mt-4 pt-4 border-t border-primary-100">
-                <h4 className="font-medium text-secondary-900 mb-2">Learning Strategy:</h4>
-                <p className="text-sm text-secondary-700 whitespace-pre-line">{guidanceResult.learning_path.rationale}</p>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-success-600">
+                {selectedCourses.length}
+              </div>
+              <div className="text-sm text-success-700">Courses</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-blue-600">
+                {totalCredits}
+              </div>
+              <div className="text-sm text-blue-700">Total Credits</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-warning-600">
+                {selectedProjects.length}
+              </div>
+              <div className="text-sm text-warning-700">Projects</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Empty State */}
+        {selectedCourses.length === 0 && selectedProjects.length === 0 ? (
+          <div className="card text-center py-12">
+            <div className="text-secondary-400 mb-4">
+              <Calendar className="h-16 w-16 mx-auto" />
+            </div>
+            <h3 className="text-lg font-medium text-secondary-700 mb-2">
+              Your Roadmap is Empty
+            </h3>
+            <p className="text-secondary-600 mb-4">
+              Add courses and projects from the recommendations to build your personalized learning roadmap.
+            </p>
+            <div className="flex justify-center space-x-4">
+              <button onClick={() => setActiveTab('courses')} className="btn-primary btn-sm">
+                Browse Courses
+              </button>
+              <button onClick={() => setActiveTab('projects')} className="btn-secondary btn-sm">
+                Browse Projects
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="space-y-6">
+            {/* Unassigned Courses */}
+            {unassignedCourses.length > 0 && (
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-semibold text-secondary-900">Unassigned Courses</h3>
+                  <span className="text-sm text-secondary-500">{unassignedCourses.length} course(s)</span>
+                </div>
+                <div className="card bg-secondary-50 border-2 border-dashed border-secondary-300">
+                  <p className="text-sm text-secondary-600 mb-3">Drag courses to assign them to a semester</p>
+                  <div className="space-y-2">
+                    {unassignedCourses.map((course: any, index: number) => {
+                      const courseName = course.title || course.course_name || 'Untitled Course'
+                      const courseCode = course.course_code || course.code || 'N/A'
+                      const credits = Number((course as any).semester_credit_hours || course.credit_hours || 3)
+                      
+                      return (
+                        <div
+                          key={index}
+                          draggable
+                          onDragStart={() => handleDragStart(course, null)}
+                          className="flex items-center justify-between p-3 bg-white rounded-lg hover:shadow-md transition-all cursor-move border border-secondary-200"
+                        >
+                          <div className="flex items-center space-x-3 flex-1">
+                            <GripVertical className="h-4 w-4 text-secondary-400" />
+                            <BookOpen className="h-5 w-5 text-primary-600 flex-shrink-0" />
+                            <div className="flex-1 min-w-0">
+                              <div className="font-medium text-secondary-900">{courseName}</div>
+                              <div className="text-sm text-secondary-600">{courseCode}</div>
+                            </div>
+                          </div>
+                          <div className="flex items-center space-x-3">
+                            <span className="text-sm text-secondary-600">{credits} cr</span>
+                            <button
+                              onClick={() => handleRemoveCourse(course)}
+                              className="p-1.5 text-error-600 hover:bg-error-50 rounded"
+                              title="Remove from plan"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </button>
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
               </div>
             )}
-          </div>
-
-          {/* Milestones */}
-          {guidanceResult.learning_path.milestones && guidanceResult.learning_path.milestones.length > 0 && (
-            <div className="card">
-              <h3 className="text-lg font-semibold text-secondary-900 mb-4">Learning Milestones</h3>
-              <div className="space-y-3">
-                {guidanceResult.learning_path.milestones.map((milestone: any, index: number) => (
-                  <div key={index} className="flex items-start space-x-3 p-3 bg-secondary-50 rounded-lg">
-                    <div className="flex-shrink-0 w-8 h-8 bg-primary-600 text-white rounded-full flex items-center justify-center font-bold">
-                      {index + 1}
-                    </div>
-                    <div className="flex-1">
-                      <h4 className="font-medium text-secondary-900">{milestone.name}</h4>
-                      <p className="text-sm text-secondary-600 mt-1">{milestone.description}</p>
-                      <div className="text-xs text-secondary-500 mt-1">
-                        Semesters: {milestone.semesters?.join(', ')}
+            
+            {/* Semester Breakdown */}
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold text-secondary-900">Semester Plan</h3>
+                <button onClick={addNewSemester} className="btn-primary btn-sm flex items-center space-x-2">
+                  <Plus className="h-4 w-4" />
+                  <span>Add Semester</span>
+                </button>
+              </div>
+              
+              {semesters.map((semester) => {
+                const semCredits = getSemesterCredits(semester)
+                const isOverloaded = semCredits > 18
+                const isNearMax = semCredits > 12 && semCredits <= 18
+                
+                return (
+                  <div 
+                    key={semester.id} 
+                    className="card"
+                    onDragOver={handleDragOver}
+                    onDrop={() => handleDrop(semester.id)}
+                  >
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex-1">
+                        <div className="flex items-center space-x-3">
+                          <h4 className="text-lg font-medium text-secondary-900">
+                            {semester.name}
+                          </h4>
+                          <button
+                            onClick={() => removeSemester(semester.id)}
+                            className="p-1 text-error-600 hover:bg-error-50 rounded"
+                            title="Remove semester"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </button>
+                        </div>
+                        <p className="text-sm text-secondary-600 mt-1">
+                          {semester.courses.length} course{semester.courses.length !== 1 ? 's' : ''}
+                        </p>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <span className={`px-3 py-1.5 rounded-full text-sm font-medium ${
+                          isOverloaded 
+                            ? 'bg-error-100 text-error-700 border border-error-300' 
+                            : isNearMax
+                            ? 'bg-warning-100 text-warning-700 border border-warning-300'
+                            : 'bg-success-100 text-success-700 border border-success-300'
+                        }`}>
+                          {semCredits} / 12-18 credits
+                        </span>
                       </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Semester Breakdown */}
-          {guidanceResult.learning_path.semesters && guidanceResult.learning_path.semesters.length > 0 && (
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-secondary-900">Semester Plan</h3>
-              {guidanceResult.learning_path.semesters.map((semester: any, index: number) => (
-                <div key={index} className="card">
-                  <div className="flex items-center justify-between mb-4">
-                    <div>
-                      <h4 className="text-lg font-medium text-secondary-900">
-                        {semester.semester_name || semester.name || `Semester ${index + 1}`}
-                      </h4>
-                      {semester.focus_area && (
-                        <p className="text-sm text-secondary-600 mt-1">Focus: {semester.focus_area}</p>
-                      )}
-                    </div>
-                    <span className="badge-primary">
-                      {semester.total_credits || semester.credits || 0} credits
-                    </span>
-                  </div>
-                  
-                  <div className="grid md:grid-cols-2 gap-4">
-                    {semester.courses?.map((course: any, courseIndex: number) => (
-                      <div key={courseIndex} className="flex items-start space-x-3 p-3 bg-secondary-50 rounded-lg hover:bg-secondary-100 transition-colors">
-                        <BookOpen className="h-5 w-5 text-primary-600 mt-0.5 flex-shrink-0" />
-                        <div className="flex-1 min-w-0">
-                          <div className="font-medium text-secondary-900 line-clamp-1">
-                            {course.title || course.name || 'Untitled Course'}
-                          </div>
-                          <div className="text-sm text-secondary-600">
-                            {course.course_code || course.code} • {course.credit_hours || course.credits || 3} credits
-                          </div>
-                          {course.priority && (
-                            <span className={`inline-block mt-1 text-xs px-2 py-0.5 rounded-full ${
-                              course.priority === 'high' || course.priority === 'critical' 
-                                ? 'bg-error-100 text-error-700' 
-                                : course.priority === 'medium' 
-                                ? 'bg-warning-100 text-warning-700' 
-                                : 'bg-success-100 text-success-700'
-                            }`}>
-                              {course.priority} priority
-                            </span>
-                          )}
-                          {course.skills_gained && course.skills_gained.length > 0 && (
-                            <div className="mt-2 flex flex-wrap gap-1">
-                              {course.skills_gained.slice(0, 2).map((skill: string, skillIdx: number) => (
-                                <span key={skillIdx} className="text-xs badge-primary">
-                                  {skill}
-                                </span>
-                              ))}
+                    
+                    {semester.courses.length === 0 ? (
+                      <div className="p-8 border-2 border-dashed border-secondary-300 rounded-lg text-center bg-secondary-50">
+                        <BookOpen className="h-8 w-8 mx-auto text-secondary-400 mb-2" />
+                        <p className="text-sm text-secondary-500">Drop courses here to add to {semester.name}</p>
+                      </div>
+                    ) : (
+                      <div className="space-y-2">
+                        {semester.courses.map((course: any, courseIndex: number) => {
+                          const courseName = course.title || course.course_name || 'Untitled Course'
+                          const courseCode = course.course_code || course.code || 'N/A'
+                          const credits = Number((course as any).semester_credit_hours || course.credit_hours || 3)
+                          const skillsTaught = (course as any).skills_addressed || course.skills_taught || []
+                          
+                          return (
+                            <div
+                              key={courseIndex}
+                              draggable
+                              onDragStart={() => handleDragStart(course, semester.id)}
+                              className="flex items-start justify-between p-3 bg-secondary-50 rounded-lg hover:bg-secondary-100 transition-colors group cursor-move"
+                            >
+                              <div className="flex items-start space-x-3 flex-1">
+                                <GripVertical className="h-4 w-4 text-secondary-400 mt-1" />
+                                <BookOpen className="h-5 w-5 text-primary-600 mt-0.5 flex-shrink-0" />
+                                <div className="flex-1 min-w-0">
+                                  <div className="font-medium text-secondary-900">
+                                    {courseName}
+                                  </div>
+                                  <div className="text-sm text-secondary-600">
+                                    {courseCode} • {credits} credit{credits !== 1 ? 's' : ''}
+                                  </div>
+                                  {skillsTaught.length > 0 && (
+                                    <div className="mt-2 flex flex-wrap gap-1">
+                                      {skillsTaught.slice(0, 3).map((skill: string, skillIdx: number) => (
+                                        <span key={skillIdx} className="text-xs badge-primary">
+                                          {skill}
+                                        </span>
+                                      ))}
+                                      {skillsTaught.length > 3 && (
+                                        <span className="text-xs text-secondary-500">
+                                          +{skillsTaught.length - 3} more
+                                        </span>
+                                      )}
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                              <button
+                                onClick={() => removeCourseFromSemester(semester.id, course)}
+                                className="ml-4 p-2 text-error-600 hover:bg-error-50 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                                title="Remove from semester"
+                              >
+                                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                              </button>
                             </div>
-                          )}
+                          )
+                        })}
+                      </div>
+                    )}
+                    
+                    {/* Credit limit warning */}
+                    {isOverloaded && (
+                      <div className="mt-3 p-3 bg-error-50 border border-error-200 rounded-lg">
+                        <p className="text-sm text-error-700">
+                          ⚠️ Warning: This semester exceeds the recommended 18 credit maximum. Consider redistributing courses.
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                )
+              })}
+            </div>
+
+            {/* Projects Section */}
+            {selectedProjects.length > 0 && (
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-secondary-900">Portfolio Projects</h3>
+                <div className="card">
+                  <div className="space-y-3">
+                    {selectedProjects.map((project: any, index: number) => (
+                      <div key={index} className="flex items-start justify-between p-3 bg-secondary-50 rounded-lg hover:bg-secondary-100 transition-colors group">
+                        <div className="flex items-start space-x-3 flex-1">
+                          <Code className="h-5 w-5 text-success-600 mt-0.5 flex-shrink-0" />
+                          <div className="flex-1 min-w-0">
+                            <div className="font-medium text-secondary-900">
+                              {project.title}
+                            </div>
+                            <div className="text-sm text-secondary-600 mt-1">
+                              {project.description}
+                            </div>
+                            <div className="flex items-center space-x-4 mt-2 text-xs text-secondary-500">
+                              <span className={`px-2 py-0.5 rounded-full ${
+                                project.difficulty === 'beginner' ? 'bg-success-100 text-success-700' :
+                                project.difficulty === 'intermediate' ? 'bg-warning-100 text-warning-700' :
+                                'bg-error-100 text-error-700'
+                              }`}>
+                                {project.difficulty}
+                              </span>
+                              <span className="flex items-center">
+                                <Clock className="h-3 w-3 mr-1" />
+                                {project.estimated_time}
+                              </span>
+                            </div>
+                            {project.skills_practiced && project.skills_practiced.length > 0 && (
+                              <div className="mt-2 flex flex-wrap gap-1">
+                                {project.skills_practiced.slice(0, 4).map((skill: string, skillIdx: number) => (
+                                  <span key={skillIdx} className="text-xs badge-success">
+                                    {skill}
+                                  </span>
+                                ))}
+                                {project.skills_practiced.length > 4 && (
+                                  <span className="text-xs text-secondary-500">
+                                    +{project.skills_practiced.length - 4} more
+                                  </span>
+                                )}
+                              </div>
+                            )}
+                          </div>
                         </div>
+                        <button
+                          onClick={() => handleRemoveProject(project)}
+                          className="ml-4 p-2 text-error-600 hover:bg-error-50 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                          title="Remove from roadmap"
+                        >
+                          <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                          </svg>
+                        </button>
                       </div>
                     ))}
                   </div>
                 </div>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
-    </div>
-  )
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    )
+  }
 
   const renderTabContent = () => {
     switch (activeTab) {
