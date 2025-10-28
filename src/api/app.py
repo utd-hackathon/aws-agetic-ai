@@ -62,12 +62,6 @@ class CareerQueryResponse(BaseModel):
     error: Optional[str] = None
     processing_time_seconds: Optional[float] = None
 
-class CareerAdviceRequest(BaseModel):
-    career_goal: str
-    location: Optional[str] = ""
-    current_skills: Optional[List[str]] = []
-    completed_courses: Optional[List[str]] = []
-    experience_level: Optional[str] = "beginner"
 
 class JobMarketRequest(BaseModel):
     job_title: str
@@ -108,7 +102,6 @@ async def root():
             "/auth/status", 
             "/auth/logout",
             "/api/career-guidance",
-            "/career-advice",
             "/job-market",
             "/course-search",
             "/agent-capabilities",
@@ -218,18 +211,6 @@ async def get_career_guidance(request: CareerQueryRequest):
             detail=f"Failed to process career query: {str(e)}"
         )
 
-@app.post("/career-advice")
-async def get_career_advice(request: CareerAdviceRequest):
-    """Get comprehensive career advice based on career goals"""
-    try:
-        orchestrator_request = {
-            "request_type": "career_advice",
-            **request.dict()
-        }
-        response = orchestrator.process_request(orchestrator_request)
-        return response
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error processing request: {str(e)}")
 
 @app.post("/job-market")
 async def get_job_market_analysis(request: JobMarketRequest):

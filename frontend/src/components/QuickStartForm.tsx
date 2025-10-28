@@ -17,6 +17,9 @@ const QuickStartForm: React.FC<QuickStartFormProps> = ({ options, onSubmit, load
   })
 
   const [selectedSkills, setSelectedSkills] = useState<string[]>([])
+  const [customCareer, setCustomCareer] = useState('')
+  const [customSkill, setCustomSkill] = useState('')
+  const [showCustomCareer, setShowCustomCareer] = useState(false)
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }))
@@ -31,6 +34,31 @@ const QuickStartForm: React.FC<QuickStartFormProps> = ({ options, onSubmit, load
       setFormData(prev => ({ ...prev, current_skills: newSkills }))
       return newSkills
     })
+  }
+
+  const handleAddCustomSkill = () => {
+    if (customSkill.trim() && !selectedSkills.includes(customSkill.trim())) {
+      const newSkills = [...selectedSkills, customSkill.trim()]
+      setSelectedSkills(newSkills)
+      setFormData(prev => ({ ...prev, current_skills: newSkills }))
+      setCustomSkill('')
+    }
+  }
+
+  const handleCareerChange = (value: string) => {
+    if (value === 'custom') {
+      setShowCustomCareer(true)
+      setFormData(prev => ({ ...prev, career_goal: '' }))
+    } else {
+      setShowCustomCareer(false)
+      setFormData(prev => ({ ...prev, career_goal: value }))
+    }
+  }
+
+  const handleCustomCareerSubmit = () => {
+    if (customCareer.trim()) {
+      setFormData(prev => ({ ...prev, career_goal: customCareer.trim() }))
+    }
   }
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -53,16 +81,38 @@ const QuickStartForm: React.FC<QuickStartFormProps> = ({ options, onSubmit, load
             What career do you want to pursue? *
           </label>
           <select
-            value={formData.career_goal}
-            onChange={(e) => handleInputChange('career_goal', e.target.value)}
+            value={showCustomCareer ? 'custom' : formData.career_goal}
+            onChange={(e) => handleCareerChange(e.target.value)}
             className="input-field"
-            required
+            required={!showCustomCareer}
           >
             <option value="">Select your career goal</option>
             {options.career_goals.map(goal => (
               <option key={goal} value={goal}>{goal}</option>
             ))}
+            <option value="custom">✏️ Other (type below)</option>
           </select>
+          
+          {showCustomCareer && (
+            <div className="mt-3 flex gap-2">
+              <input
+                type="text"
+                value={customCareer}
+                onChange={(e) => setCustomCareer(e.target.value)}
+                onBlur={handleCustomCareerSubmit}
+                onKeyPress={(e) => e.key === 'Enter' && handleCustomCareerSubmit()}
+                className="input-field flex-1"
+                placeholder="Enter your career goal"
+                autoFocus
+                required
+              />
+            </div>
+          )}
+          {showCustomCareer && formData.career_goal && (
+            <p className="text-sm text-success-600 mt-2">
+              ✓ Career goal set: {formData.career_goal}
+            </p>
+          )}
         </div>
 
         {/* Current Skills */}
@@ -86,10 +136,50 @@ const QuickStartForm: React.FC<QuickStartFormProps> = ({ options, onSubmit, load
               </button>
             ))}
           </div>
+          
+          {/* Custom Skill Input */}
+          <div className="mt-3">
+            <label className="text-xs text-secondary-600 mb-1 block">
+              If not listed, type below:
+            </label>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={customSkill}
+                onChange={(e) => setCustomSkill(e.target.value)}
+                onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddCustomSkill())}
+                className="input-field flex-1 text-sm"
+                placeholder="e.g., React, Python, SQL"
+              />
+              <button
+                type="button"
+                onClick={handleAddCustomSkill}
+                disabled={!customSkill.trim()}
+                className="btn-outline btn-sm whitespace-nowrap disabled:opacity-50"
+              >
+                Add Skill
+              </button>
+            </div>
+          </div>
+          
           {selectedSkills.length > 0 && (
-            <p className="text-sm text-secondary-500 mt-2">
-              Selected: {selectedSkills.join(', ')}
-            </p>
+            <div className="mt-3 flex flex-wrap gap-1">
+              {selectedSkills.map(skill => (
+                <span
+                  key={skill}
+                  className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-primary-100 text-primary-700"
+                >
+                  {skill}
+                  <button
+                    type="button"
+                    onClick={() => handleSkillToggle(skill)}
+                    className="ml-1 hover:text-primary-900"
+                  >
+                    ×
+                  </button>
+                </span>
+              ))}
+            </div>
           )}
         </div>
 

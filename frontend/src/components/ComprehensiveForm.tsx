@@ -29,6 +29,11 @@ const ComprehensiveForm: React.FC<ComprehensiveFormProps> = ({ options, onSubmit
   // const [selectedSkills, setSelectedSkills] = useState<string[]>([])
   // const [selectedTargetSkills, setSelectedTargetSkills] = useState<string[]>([])
   // const [selectedIndustries, setSelectedIndustries] = useState<string[]>([])
+  
+  const [customCareer, setCustomCareer] = useState('')
+  const [customCurrentSkill, setCustomCurrentSkill] = useState('')
+  const [customTargetSkill, setCustomTargetSkill] = useState('')
+  const [showCustomCareer, setShowCustomCareer] = useState(false)
 
   const handleInputChange = (field: string, value: any) => {
     setFormData(prev => ({ ...prev, [field]: value }))
@@ -41,6 +46,38 @@ const ComprehensiveForm: React.FC<ComprehensiveFormProps> = ({ options, onSubmit
     
     setter(newSelection)
     setFormData(prev => ({ ...prev, [field]: newSelection }))
+  }
+
+  const handleCareerChange = (value: string) => {
+    if (value === 'custom') {
+      setShowCustomCareer(true)
+      setFormData(prev => ({ ...prev, career_goal: '' }))
+    } else {
+      setShowCustomCareer(false)
+      setFormData(prev => ({ ...prev, career_goal: value }))
+    }
+  }
+
+  const handleCustomCareerSubmit = () => {
+    if (customCareer.trim()) {
+      setFormData(prev => ({ ...prev, career_goal: customCareer.trim() }))
+    }
+  }
+
+  const handleAddCustomCurrentSkill = () => {
+    if (customCurrentSkill.trim() && !formData.current_skills.includes(customCurrentSkill.trim())) {
+      const newSkills = [...formData.current_skills, customCurrentSkill.trim()]
+      setFormData(prev => ({ ...prev, current_skills: newSkills }))
+      setCustomCurrentSkill('')
+    }
+  }
+
+  const handleAddCustomTargetSkill = () => {
+    if (customTargetSkill.trim() && !formData.target_skills.includes(customTargetSkill.trim())) {
+      const newSkills = [...formData.target_skills, customTargetSkill.trim()]
+      setFormData(prev => ({ ...prev, target_skills: newSkills }))
+      setCustomTargetSkill('')
+    }
   }
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -69,16 +106,38 @@ const ComprehensiveForm: React.FC<ComprehensiveFormProps> = ({ options, onSubmit
               Primary Career Goal *
             </label>
             <select
-              value={formData.career_goal}
-              onChange={(e) => handleInputChange('career_goal', e.target.value)}
+              value={showCustomCareer ? 'custom' : formData.career_goal}
+              onChange={(e) => handleCareerChange(e.target.value)}
               className="input-field"
-              required
+              required={!showCustomCareer}
             >
               <option value="">Select your primary career goal</option>
               {options.career_goals.map(goal => (
                 <option key={goal} value={goal}>{goal}</option>
               ))}
+              <option value="custom">✏️ Other (type below)</option>
             </select>
+            
+            {showCustomCareer && (
+              <div className="mt-3">
+                <input
+                  type="text"
+                  value={customCareer}
+                  onChange={(e) => setCustomCareer(e.target.value)}
+                  onBlur={handleCustomCareerSubmit}
+                  onKeyPress={(e) => e.key === 'Enter' && handleCustomCareerSubmit()}
+                  className="input-field"
+                  placeholder="Enter your career goal"
+                  autoFocus
+                  required
+                />
+                {formData.career_goal && (
+                  <p className="text-sm text-success-600 mt-2">
+                    ✓ Career goal set: {formData.career_goal}
+                  </p>
+                )}
+              </div>
+            )}
           </div>
 
           <div>
@@ -203,6 +262,51 @@ const ComprehensiveForm: React.FC<ComprehensiveFormProps> = ({ options, onSubmit
                 </button>
               ))}
             </div>
+            
+            {/* Custom Skill Input */}
+            <div className="mt-3">
+              <label className="text-xs text-secondary-600 mb-1 block">
+                If not listed, type below:
+              </label>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={customCurrentSkill}
+                  onChange={(e) => setCustomCurrentSkill(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddCustomCurrentSkill())}
+                  className="input-field flex-1 text-sm"
+                  placeholder="e.g., React, Python, SQL"
+                />
+                <button
+                  type="button"
+                  onClick={handleAddCustomCurrentSkill}
+                  disabled={!customCurrentSkill.trim()}
+                  className="btn-outline btn-sm whitespace-nowrap disabled:opacity-50"
+                >
+                  Add Skill
+                </button>
+              </div>
+            </div>
+            
+            {formData.current_skills.length > 0 && (
+              <div className="mt-3 flex flex-wrap gap-1">
+                {formData.current_skills.map(skill => (
+                  <span
+                    key={skill}
+                    className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-primary-100 text-primary-700"
+                  >
+                    {skill}
+                    <button
+                      type="button"
+                      onClick={() => handleMultiSelect('current_skills', skill, formData.current_skills, (skills) => setFormData(prev => ({ ...prev, current_skills: skills })))}
+                      className="ml-1 hover:text-primary-900"
+                    >
+                      ×
+                    </button>
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
 
           <div>
@@ -225,6 +329,51 @@ const ComprehensiveForm: React.FC<ComprehensiveFormProps> = ({ options, onSubmit
                 </button>
               ))}
             </div>
+            
+            {/* Custom Target Skill Input */}
+            <div className="mt-3">
+              <label className="text-xs text-secondary-600 mb-1 block">
+                If not listed, type below:
+              </label>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={customTargetSkill}
+                  onChange={(e) => setCustomTargetSkill(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddCustomTargetSkill())}
+                  className="input-field flex-1 text-sm"
+                  placeholder="e.g., Machine Learning, AWS, Docker"
+                />
+                <button
+                  type="button"
+                  onClick={handleAddCustomTargetSkill}
+                  disabled={!customTargetSkill.trim()}
+                  className="btn-outline btn-sm whitespace-nowrap disabled:opacity-50"
+                >
+                  Add Skill
+                </button>
+              </div>
+            </div>
+            
+            {formData.target_skills.length > 0 && (
+              <div className="mt-3 flex flex-wrap gap-1">
+                {formData.target_skills.map(skill => (
+                  <span
+                    key={skill}
+                    className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-green-100 text-green-700"
+                  >
+                    {skill}
+                    <button
+                      type="button"
+                      onClick={() => handleMultiSelect('target_skills', skill, formData.target_skills, (skills) => setFormData(prev => ({ ...prev, target_skills: skills })))}
+                      className="ml-1 hover:text-green-900"
+                    >
+                      ×
+                    </button>
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
 
           <div>

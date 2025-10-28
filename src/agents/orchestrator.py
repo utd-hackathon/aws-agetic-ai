@@ -62,6 +62,9 @@ class AgentOrchestrator:
         """
         print("🎯 Processing career advice request through Career Matching Agent...")
         
+        # Extract career goal from request
+        career_goal = request.get("career_goal", "")
+        
         # Use the Career Matching Agent to coordinate everything
         career_matching_response = await self.career_matching_agent.process_request(request)
         
@@ -97,6 +100,13 @@ class AgentOrchestrator:
                 
                 # Learning path
                 "learning_path": career_matching_response.get("learning_path", {}),
+                
+                # Project recommendations
+                "project_recommendations": await self._generate_project_recommendations(
+                    career_goal, 
+                    request.get("current_skills", []), 
+                    career_matching_response.get("course_recommendations", [])
+                ),
                 
                 # Summary
                 "summary": {
@@ -182,6 +192,56 @@ class AgentOrchestrator:
                 "success": False,
                 "error": f"Project recommendation failed: {str(e)}"
             }
+
+    async def _generate_project_recommendations(
+        self, 
+        career_goal: str, 
+        current_skills: List[str], 
+        course_recommendations: List[Dict[str, Any]]
+    ) -> List[Dict[str, Any]]:
+        """
+        Generate project recommendations using the Project Advisor Agent
+        
+        Args:
+            career_goal: User's career goal
+            current_skills: User's current skills
+            course_recommendations: Recommended courses
+            
+        Returns:
+            List[Dict[str, Any]]: Project recommendations
+        """
+        try:
+            # Extract target skills from course recommendations
+            target_skills = []
+            for course in course_recommendations:
+                skills_addressed = course.get("skills_addressed", [])
+                target_skills.extend(skills_addressed)
+            
+            # Remove duplicates
+            target_skills = list(set(target_skills))
+            
+            # Create project recommendation request
+            project_request = {
+                "request_type": "project_recommendations",
+                "career_goal": career_goal,
+                "current_skills": current_skills,
+                "target_skills": target_skills[:10],  # Limit to top 10 skills
+                "skill_level": "intermediate",  # Default level
+                "recommended_courses": course_recommendations[:5]  # Top 5 courses
+            }
+            
+            # Get project recommendations
+            result = await self.project_advisor_agent.process_request(project_request)
+            
+            if result.get("success") and result.get("projects"):
+                return result["projects"]
+            else:
+                # Return empty list if no projects found
+                return []
+                
+        except Exception as e:
+            print(f"⚠️ Error generating project recommendations: {e}")
+            return []
 
     def get_agent_capabilities(self) -> Dict[str, List[str]]:
         """
