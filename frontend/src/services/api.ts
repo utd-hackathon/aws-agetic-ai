@@ -119,6 +119,11 @@ export const careerGuidanceAPI = {
     return response.data
   },
 
+  getAllCourses: async () => {
+    const response = await api.get('/api/courses/all')
+    return response.data
+  },
+
   getProjectRecommendations: async (request: any) => {
     const response = await api.post('/api/project-recommendations', request)
     return response.data

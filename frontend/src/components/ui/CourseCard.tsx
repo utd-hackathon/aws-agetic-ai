@@ -51,6 +51,9 @@ const CourseCard: React.FC<CourseCardProps> = ({
   const creditHours = (course as any).semester_credit_hours || course.credit_hours || 3
   const skillsTaught = (course as any).skills_addressed || course.skills_taught || []
   const prerequisites = course.prerequisites || []
+  
+  // Default to 'low' priority if not specified (for courses from catalog vs recommendations)
+  const priority = course.priority || 'low'
 
   const priorityConfig = {
     high: {
@@ -76,7 +79,7 @@ const CourseCard: React.FC<CourseCardProps> = ({
     }
   }
 
-  const config = priorityConfig[course.priority]
+  const config = priorityConfig[priority as 'high' | 'medium' | 'low']
   const PriorityIcon = config.icon
 
   const handleAddToPlan = () => {
@@ -109,18 +112,21 @@ const CourseCard: React.FC<CourseCardProps> = ({
         <div className="flex-1 min-w-0">
           <div className="flex items-center space-x-2 mb-1">
             <span className="text-sm font-mono text-secondary-500 bg-secondary-100 px-2 py-1 rounded">
-              {course.course_code}
+              {course.course_code || 'N/A'}
             </span>
-            <div className={`flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-medium ${config.bgColor} ${config.color} ${config.borderColor} border`}>
-              <PriorityIcon className="h-3 w-3" />
-              <span>{config.label}</span>
-            </div>
+            {/* Only show priority badge for recommended courses */}
+            {course.priority && (
+              <div className={`flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-medium ${config.bgColor} ${config.color} ${config.borderColor} border`}>
+                <PriorityIcon className="h-3 w-3" />
+                <span>{config.label}</span>
+              </div>
+            )}
           </div>
           <h3 className="text-lg font-semibold text-secondary-900 mb-1 line-clamp-2">
             {courseName}
           </h3>
           <p className="text-sm text-secondary-600 mb-2">
-            {course.department || 'UTD Course'}
+            {course.department || (course as any).prefix || 'UTD Course'}
           </p>
         </div>
 
@@ -191,13 +197,15 @@ const CourseCard: React.FC<CourseCardProps> = ({
           </div>
         )}
 
-        {/* Explanation */}
-        <div className="bg-primary-50 p-3 rounded-lg">
-          <h4 className="text-sm font-medium text-primary-800 mb-1">Why This Course?</h4>
-          <p className="text-sm text-primary-700">
-            {course.explanation}
-          </p>
-        </div>
+        {/* Explanation - only show for recommended courses */}
+        {course.explanation && (
+          <div className="bg-primary-50 p-3 rounded-lg">
+            <h4 className="text-sm font-medium text-primary-800 mb-1">Why This Course?</h4>
+            <p className="text-sm text-primary-700">
+              {course.explanation}
+            </p>
+          </div>
+        )}
 
         {/* Expandable Content */}
         {isExpanded && (

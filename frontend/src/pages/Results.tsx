@@ -3,6 +3,7 @@ import { useCareerGuidance } from '../context/CareerGuidanceContext'
 import { useNavigate } from 'react-router-dom'
 import CourseCard from '../components/ui/CourseCard'
 import ProjectCard from '../components/ui/ProjectCard'
+import { careerGuidanceAPI } from '../services/api'
 import { 
   ArrowLeft, 
   Download, 
@@ -74,7 +75,13 @@ const Results: React.FC = () => {
 
   // Helper function to get unique course identifier
   const getCourseId = (course: any): string => {
-    return course.course_code || course.id || course.course_name || JSON.stringify(course)
+    // Use course_code if it's not empty, otherwise fall back to other identifiers
+    const id = (course.course_code && course.course_code.trim()) || 
+               (course.id && course.id.trim()) || 
+               course.title || 
+               course.course_name || 
+               JSON.stringify(course)
+    return id
   }
 
   // Helper function to check if course is in plan
@@ -350,17 +357,23 @@ Generated on: ${new Date().toLocaleDateString()}
       
       setLoadingAllCourses(true)
       try {
-        // Mock data - In production, this would call an API endpoint
-        // For now, we'll use a placeholder. You can replace this with actual API call
-        const mockCourses = [
-          ...( guidanceResult.course_recommendations || [])
-        ]
-        setAllCourses(mockCourses)
-        setShowAllCourses(true)
-        showToast('All courses loaded', 'success')
-      } catch (error) {
+        // Call the backend API to get all courses
+        console.log('Fetching all courses from API...')
+        const response = await careerGuidanceAPI.getAllCourses()
+        console.log('API Response:', response)
+        
+        if (response.success && response.courses) {
+          setAllCourses(response.courses)
+          setShowAllCourses(true)
+          showToast(`Loaded ${response.total_courses} courses`, 'success')
+        } else {
+          console.error('Invalid response format:', response)
+          throw new Error(response.error || 'Failed to load courses')
+        }
+      } catch (error: any) {
         console.error('Error loading all courses:', error)
-        showToast('Failed to load all courses', 'error')
+        const errorMessage = error.response?.data?.detail || error.message || 'Failed to load all courses'
+        showToast(errorMessage, 'error')
       } finally {
         setLoadingAllCourses(false)
       }

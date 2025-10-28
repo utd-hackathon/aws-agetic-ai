@@ -41,6 +41,8 @@ class AgentOrchestrator:
             return await self._process_job_market_request(request)
         elif request_type == "course_search":
             return self._process_course_search_request(request)
+        elif request_type == "get_all_courses":
+            return self._process_get_all_courses_request(request)
         elif request_type == "project_recommendations":
             return await self._process_project_request(request)
         else:
@@ -242,6 +244,34 @@ class AgentOrchestrator:
         except Exception as e:
             print(f"⚠️ Error generating project recommendations: {e}")
             return []
+
+    def _process_get_all_courses_request(self, request: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Get all courses from the UTD course catalog
+        
+        Args:
+            request (Dict[str, Any]): Request (no parameters needed)
+            
+        Returns:
+            Dict[str, Any]: All courses response
+        """
+        try:
+            all_courses = self.course_catalog_agent.get_all_courses()
+            
+            return {
+                "success": True,
+                "courses": all_courses,
+                "total_courses": len(all_courses),
+                "message": f"Retrieved {len(all_courses)} courses from UTD catalog"
+            }
+        except Exception as e:
+            print(f"⚠️ Error fetching all courses: {e}")
+            return {
+                "success": False,
+                "courses": [],
+                "total_courses": 0,
+                "error": str(e)
+            }
 
     def get_agent_capabilities(self) -> Dict[str, List[str]]:
         """

@@ -104,6 +104,7 @@ async def root():
             "/api/career-guidance",
             "/job-market",
             "/course-search",
+            "/api/courses/all",
             "/agent-capabilities",
             "/health",
             "/api/stats"
@@ -247,6 +248,18 @@ async def search_courses(request: CourseSearchRequest):
         return response
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error processing request: {str(e)}")
+
+@app.get("/api/courses/all")
+async def get_all_courses():
+    """Get all available UTD courses from the catalog"""
+    try:
+        orchestrator_request = {
+            "request_type": "get_all_courses"
+        }
+        response = await orchestrator.process_request(orchestrator_request)
+        return response
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching courses: {str(e)}")
 
 @app.post("/api/project-recommendations")
 async def get_project_recommendations(request: ProjectRecommendationRequest):
